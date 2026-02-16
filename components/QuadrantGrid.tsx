@@ -77,7 +77,7 @@ export function QuadrantGrid({
 
       // Map 1-10 range to 0-100% of grid
       const x = ((xValue - 1) / 9) * 100;
-      const y = ((10 - yValue) / 9) * 100; // Invert Y so higher values are at top
+      const y = ((yValue - 1) / 9) * 100; // No inversion - higher values at bottom
 
       return { player, x, y, offsetX: 0, offsetY: 0 };
     });
