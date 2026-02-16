@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { AvatarUpload } from '@/components/AvatarUpload';
 import { createGroup, createGroupWithMembers } from '../actions';
@@ -14,6 +14,7 @@ interface Member {
 
 export default function GroupPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [tab, setTab] = useState<'create' | 'join'>('create');
 
   // Create group state
@@ -28,6 +29,15 @@ export default function GroupPage() {
 
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Auto-fill join code if provided in URL
+  useEffect(() => {
+    const codeParam = searchParams.get('code');
+    if (codeParam) {
+      setJoinCode(codeParam.toUpperCase());
+      setTab('join');
+    }
+  }, [searchParams]);
 
   const addMember = () => {
     setMembers([...members, { name: '', avatarUrl: null }]);
@@ -219,6 +229,28 @@ export default function GroupPage() {
                   <p className="text-sm text-[#39ff14]/80 uppercase tracking-wider">Share this code with your group</p>
                   <p className="text-xs text-[#39ff14]/60 mt-2">Members will select their name when they join</p>
                 </div>
+
+                {/* Shareable Link */}
+                <div className="bg-[#1a1b2e] border-2 border-[#00f0ff]/30 rounded-none p-4">
+                  <p className="text-xs text-[#7a7a9e] uppercase tracking-wider mb-2">Or Share This Link</p>
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="text"
+                      readOnly
+                      value={`${window.location.origin}/group?code=${createdCode}`}
+                      className="flex-1 px-4 py-2 bg-[#0a0b1a] border border-[#00f0ff]/20 text-[#00f0ff] rounded-none font-mono text-sm"
+                    />
+                    <button
+                      onClick={() => {
+                        navigator.clipboard.writeText(`${window.location.origin}/group?code=${createdCode}`);
+                      }}
+                      className="px-4 py-2 border-2 border-[#00f0ff] text-[#00f0ff] rounded-none font-bold uppercase text-xs tracking-wider hover:bg-[#00f0ff] hover:text-black transition-all whitespace-nowrap"
+                    >
+                      Copy Link
+                    </button>
+                  </div>
+                </div>
+
                 <div className="flex flex-col sm:flex-row gap-3">
                   <button
                     onClick={() => {
@@ -233,7 +265,7 @@ export default function GroupPage() {
                     className="flex-1 px-6 py-3 bg-gradient-to-r from-[#00f0ff] to-[#ff00aa] text-black rounded-none font-bold uppercase tracking-wider hover:scale-105 transition-all text-center"
                   >
                     View Group
-                  </Link>
+                  </button>
                 </div>
               </div>
             )}
