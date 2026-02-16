@@ -190,11 +190,11 @@ export function QuadrantGrid({
 
             {/* Y-Axis left label (top, where value 1 is) */}
             <div className="absolute left-6 top-[48%] text-xs font-bold text-[#00f0ff] uppercase tracking-wider max-w-[120px] -translate-y-full pb-2">
-              {xQuestion.label_left}
+              {xQuestion.label_right}
             </div>
             {/* Y-Axis right label (bottom, where value 10 is) */}
             <div className="absolute right-6 bottom-[48%] text-xs font-bold text-[#ff00aa] uppercase tracking-wider max-w-[120px] text-right translate-y-full pt-2">
-              {xQuestion.label_right}
+              {xQuestion.label_left}
             </div>
 
             {/* Player avatars */}
