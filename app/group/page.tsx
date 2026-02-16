@@ -237,12 +237,12 @@ export default function GroupPage() {
                     <input
                       type="text"
                       readOnly
-                      value={`${window.location.origin}/group?code=${createdCode}`}
+                      value={`${window.location.origin}/group/${createdCode}`}
                       className="flex-1 px-4 py-2 bg-[#0a0b1a] border border-[#00f0ff]/20 text-[#00f0ff] rounded-none font-mono text-sm"
                     />
                     <button
                       onClick={() => {
-                        navigator.clipboard.writeText(`${window.location.origin}/group?code=${createdCode}`);
+                        navigator.clipboard.writeText(`${window.location.origin}/group/${createdCode}`);
                       }}
                       className="px-4 py-2 border-2 border-[#00f0ff] text-[#00f0ff] rounded-none font-bold uppercase text-xs tracking-wider hover:bg-[#00f0ff] hover:text-black transition-all whitespace-nowrap"
                     >
