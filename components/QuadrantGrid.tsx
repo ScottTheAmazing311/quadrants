@@ -78,8 +78,8 @@ export function QuadrantGrid({
       // Map 1-10 range to 0-100% of grid
       // X-axis controls horizontal position (left-right)
       const x = ((xValue - 1) / 9) * 100;
-      // Y-axis controls vertical position (top-bottom)
-      const y = ((yValue - 1) / 9) * 100;
+      // Y-axis controls vertical position (top-bottom) - inverted so high values at top
+      const y = ((10 - yValue) / 9) * 100;
 
       return { player, x, y, offsetX: 0, offsetY: 0 };
     });
