@@ -44,13 +44,19 @@ export function QuadrantGrid({
     try {
       console.log('Starting html2canvas...');
       const canvas = await html2canvas(gridRef.current, {
-        scale: 2, // Reduced scale for better compatibility
+        scale: 2,
         backgroundColor: '#0a0b1a',
         logging: false,
         allowTaint: true,
         useCORS: true,
-        foreignObjectRendering: true, // Use different rendering method
-        removeContainer: true,
+        imageTimeout: 0, // Don't timeout on images
+        onclone: (clonedDoc) => {
+          // Ensure all images are visible in clone
+          const images = clonedDoc.querySelectorAll('img');
+          images.forEach((img) => {
+            img.style.display = 'block';
+          });
+        },
       });
 
       console.log('Canvas created, converting to image...');
