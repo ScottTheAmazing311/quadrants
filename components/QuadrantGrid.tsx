@@ -47,6 +47,13 @@ export function QuadrantGrid({
         scale: 3, // Higher resolution
         backgroundColor: '#0a0b1a',
         logging: false,
+        allowTaint: true,
+        useCORS: true,
+        ignoreElements: (element) => {
+          // Ignore elements that might have problematic CSS
+          return element.classList?.contains('scanlines') ||
+                 element.classList?.contains('retro-grid');
+        },
       });
 
       console.log('Canvas created, converting to image...');
