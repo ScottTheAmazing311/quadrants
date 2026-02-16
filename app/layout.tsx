@@ -14,8 +14,17 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Quadrants - Social Alignment Game",
+  title: "QUADRANTS - See how you align",
   description: "Discover how you and your friends align. Answer slider questions and visualize your group's perspectives on a 2D grid.",
+  openGraph: {
+    title: "QUADRANTS - See how you align",
+    description: "Discover how you and your friends align. Answer slider questions and visualize your group's perspectives on a 2D grid.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "QUADRANTS - See how you align",
+    description: "Discover how you and your friends align. Answer slider questions and visualize your group's perspectives on a 2D grid.",
+  },
 };
 
 export default function RootLayout({
