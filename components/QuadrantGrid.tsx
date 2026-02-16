@@ -1,8 +1,9 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useRef } from 'react';
 import { Player, Question, Response } from '@/types';
 import { Avatar } from './Avatar';
+import html2canvas from 'html2canvas';
 
 interface QuadrantGridProps {
   questions: Question[];
@@ -30,6 +31,32 @@ export function QuadrantGrid({
   onAxisChange
 }: QuadrantGridProps) {
   const [hoveredPlayer, setHoveredPlayer] = useState<string | null>(null);
+  const gridRef = useRef<HTMLDivElement>(null);
+
+  const handleExportPNG = async () => {
+    if (!gridRef.current) return;
+
+    try {
+      const canvas = await html2canvas(gridRef.current, {
+        scale: 3, // Higher resolution
+        backgroundColor: '#0a0b1a',
+        logging: false,
+      });
+
+      // Convert to blob and download
+      canvas.toBlob((blob) => {
+        if (!blob) return;
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `quadrant-${xQuestion?.prompt.slice(0, 20)}-${Date.now()}.png`;
+        link.click();
+        URL.revokeObjectURL(url);
+      });
+    } catch (error) {
+      console.error('Failed to export PNG:', error);
+    }
+  };
 
   const xQuestion = questions.find(q => q.id === selectedXQuestionId);
   const yQuestion = questions.find(q => q.id === selectedYQuestionId);
@@ -99,6 +126,16 @@ export function QuadrantGrid({
 
   return (
     <div className="space-y-8">
+      {/* Export Button */}
+      <div className="flex justify-end">
+        <button
+          onClick={handleExportPNG}
+          className="px-6 py-3 bg-gradient-to-r from-[#00f0ff] to-[#ff00aa] text-black rounded-none font-bold uppercase text-xs tracking-wider hover:scale-105 transition-all"
+        >
+          Export as PNG
+        </button>
+      </div>
+
       {/* Axis selectors with buttons */}
       {onAxisChange && (
         <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr_300px] gap-8 items-start">
@@ -125,7 +162,7 @@ export function QuadrantGrid({
           </div>
 
           {/* Grid (center) */}
-          <div className="relative w-full aspect-square max-w-4xl mx-auto bg-[#0a0b1a] rounded-none border-2 border-[#00f0ff]/50 p-8">
+          <div ref={gridRef} className="relative w-full aspect-square max-w-4xl mx-auto bg-[#0a0b1a] rounded-none border-2 border-[#00f0ff]/50 p-8">
             {/* Quadrant backgrounds */}
             <div className="absolute inset-8 grid grid-cols-2 grid-rows-2 pointer-events-none">
               <div className="bg-[#00f0ff]/5"></div>
@@ -141,21 +178,21 @@ export function QuadrantGrid({
             </div>
 
             {/* Axis labels - repositioned */}
-            {/* X-Axis left label (top right of line) */}
-            <div className="absolute left-[52%] top-6 text-xs font-bold text-[#00f0ff] uppercase tracking-wider max-w-[150px]">
+            {/* X-Axis left label (bottom left of line) */}
+            <div className="absolute right-[52%] bottom-6 text-xs font-bold text-[#00f0ff] uppercase tracking-wider max-w-[150px] text-right">
               {xQuestion.label_left}
             </div>
-            {/* X-Axis right label (bottom left of line) */}
-            <div className="absolute right-[52%] bottom-6 text-xs font-bold text-[#ff00aa] uppercase tracking-wider max-w-[150px] text-right">
+            {/* X-Axis right label (top right of line) */}
+            <div className="absolute left-[52%] top-6 text-xs font-bold text-[#ff00aa] uppercase tracking-wider max-w-[150px]">
               {xQuestion.label_right}
             </div>
 
-            {/* Y-Axis left label (top left, above line) */}
-            <div className="absolute left-6 top-[48%] text-xs font-bold text-[#00f0ff] uppercase tracking-wider max-w-[120px] -translate-y-full pb-2">
+            {/* Y-Axis left label (bottom right, below line) */}
+            <div className="absolute right-6 bottom-[48%] text-xs font-bold text-[#00f0ff] uppercase tracking-wider max-w-[120px] text-right translate-y-full pt-2">
               {yQuestion.label_left}
             </div>
-            {/* Y-Axis right label (bottom right, below line) */}
-            <div className="absolute right-6 bottom-[48%] text-xs font-bold text-[#ff00aa] uppercase tracking-wider max-w-[120px] text-right translate-y-full pt-2">
+            {/* Y-Axis right label (top left, above line) */}
+            <div className="absolute left-6 top-[48%] text-xs font-bold text-[#ff00aa] uppercase tracking-wider max-w-[120px] -translate-y-full pb-2">
               {yQuestion.label_right}
             </div>
 
