@@ -193,7 +193,7 @@ export default function Home() {
 
           {/* Current Group Indicator */}
           {currentGroup && (
-            <div className="mt-8 inline-block">
+            <div className="mt-8 w-full flex justify-center">
               <div className="bg-[#1a1b2e] border-2 border-[#00f0ff]/50 rounded-none p-6">
                 <div className="flex items-center gap-6">
                   <div>
