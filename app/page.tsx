@@ -173,9 +173,27 @@ export default function Home() {
             </Link>
           </div>
 
+          {/* Stats Bar */}
+          <div className="inline-flex gap-8 px-8 py-4 bg-[#1a1b2e] border border-[#00f0ff]/20 rounded-none">
+            <div className="text-center">
+              <div className="text-3xl font-bold text-[#00f0ff] neon-text-cyan">{quads.length}</div>
+              <div className="text-xs text-[#7a7a9e] uppercase tracking-wider">Quads</div>
+            </div>
+            <div className="w-px bg-[#00f0ff]/20"></div>
+            <div className="text-center">
+              <div className="text-3xl font-bold text-[#ff00aa] neon-text-magenta">{completedQuadIds.size}</div>
+              <div className="text-xs text-[#7a7a9e] uppercase tracking-wider">Completed</div>
+            </div>
+            <div className="w-px bg-[#00f0ff]/20"></div>
+            <div className="text-center">
+              <div className="text-3xl font-bold text-[#ffed00]">∞</div>
+              <div className="text-xs text-[#7a7a9e] uppercase tracking-wider">Insights</div>
+            </div>
+          </div>
+
           {/* Current Group Indicator */}
           {currentGroup && (
-            <div className="mb-8 inline-block">
+            <div className="mt-8 inline-block">
               <div className="bg-[#1a1b2e] border-2 border-[#00f0ff]/50 rounded-none p-6">
                 <div className="flex items-center gap-6">
                   <div>
@@ -196,24 +214,6 @@ export default function Home() {
               </div>
             </div>
           )}
-
-          {/* Stats Bar */}
-          <div className="inline-flex gap-8 px-8 py-4 bg-[#1a1b2e] border border-[#00f0ff]/20 rounded-none">
-            <div className="text-center">
-              <div className="text-3xl font-bold text-[#00f0ff] neon-text-cyan">{quads.length}</div>
-              <div className="text-xs text-[#7a7a9e] uppercase tracking-wider">Quads</div>
-            </div>
-            <div className="w-px bg-[#00f0ff]/20"></div>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-[#ff00aa] neon-text-magenta">{completedQuadIds.size}</div>
-              <div className="text-xs text-[#7a7a9e] uppercase tracking-wider">Completed</div>
-            </div>
-            <div className="w-px bg-[#00f0ff]/20"></div>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-[#ffed00]">∞</div>
-              <div className="text-xs text-[#7a7a9e] uppercase tracking-wider">Insights</div>
-            </div>
-          </div>
         </div>
 
         {/* Public Quads Grid */}
