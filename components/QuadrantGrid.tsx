@@ -34,25 +34,33 @@ export function QuadrantGrid({
   const gridRef = useRef<HTMLDivElement>(null);
 
   const handleExportPNG = async () => {
-    if (!gridRef.current) return;
+    console.log('Export button clicked');
+
+    if (!gridRef.current) {
+      console.error('Grid ref not found');
+      return;
+    }
 
     try {
+      console.log('Starting html2canvas...');
       const canvas = await html2canvas(gridRef.current, {
         scale: 3, // Higher resolution
         backgroundColor: '#0a0b1a',
         logging: false,
       });
 
-      // Convert to blob and download
-      canvas.toBlob((blob) => {
-        if (!blob) return;
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = `quadrant-${xQuestion?.prompt.slice(0, 20)}-${Date.now()}.png`;
-        link.click();
-        URL.revokeObjectURL(url);
-      });
+      console.log('Canvas created, converting to image...');
+
+      // Convert to data URL and download
+      const dataURL = canvas.toDataURL('image/png');
+      const link = document.createElement('a');
+      link.href = dataURL;
+      link.download = `quadrant-${xQuestion?.prompt.slice(0, 20).replace(/[^a-z0-9]/gi, '-')}-${Date.now()}.png`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      console.log('Download triggered');
     } catch (error) {
       console.error('Failed to export PNG:', error);
     }
