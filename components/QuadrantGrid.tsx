@@ -186,12 +186,12 @@ export function QuadrantGrid({
               {xQuestion.label_right}
             </div>
 
-            {/* Y-Axis left label (bottom right, below line) */}
-            <div className="absolute right-6 bottom-[48%] text-xs font-bold text-[#00f0ff] uppercase tracking-wider max-w-[120px] text-right translate-y-full pt-2">
+            {/* Y-Axis left label (top left, above line) */}
+            <div className="absolute left-6 top-[48%] text-xs font-bold text-[#00f0ff] uppercase tracking-wider max-w-[120px] -translate-y-full pb-2">
               {yQuestion.label_left}
             </div>
-            {/* Y-Axis right label (top left, above line) */}
-            <div className="absolute left-6 top-[48%] text-xs font-bold text-[#ff00aa] uppercase tracking-wider max-w-[120px] -translate-y-full pb-2">
+            {/* Y-Axis right label (bottom right, below line) */}
+            <div className="absolute right-6 bottom-[48%] text-xs font-bold text-[#ff00aa] uppercase tracking-wider max-w-[120px] text-right translate-y-full pt-2">
               {yQuestion.label_right}
             </div>
 
