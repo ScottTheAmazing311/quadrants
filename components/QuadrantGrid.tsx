@@ -3,7 +3,7 @@
 import { useMemo, useState, useRef } from 'react';
 import { Player, Question, Response } from '@/types';
 import { Avatar } from './Avatar';
-import html2canvas from 'html2canvas';
+import { toPng } from 'html-to-image';
 
 interface QuadrantGridProps {
   questions: Question[];
@@ -34,55 +34,24 @@ export function QuadrantGrid({
   const gridRef = useRef<HTMLDivElement>(null);
 
   const handleExportPNG = async () => {
-    console.log('Export button clicked');
-
     if (!gridRef.current) {
       console.error('Grid ref not found');
       return;
     }
 
     try {
-      console.log('Starting html2canvas...');
-      // Temporarily suppress console errors during capture
-      const originalError = console.error;
-      console.error = (...args) => {
-        if (args[0]?.includes?.('Attempting to parse') || args[0]?.includes?.('lab')) {
-          return; // Ignore lab() color errors
-        }
-        originalError(...args);
-      };
-
-      const canvas = await html2canvas(gridRef.current, {
-        scale: 2,
+      const dataUrl = await toPng(gridRef.current, {
+        quality: 1,
+        pixelRatio: 3,
         backgroundColor: '#0a0b1a',
-        logging: false,
-        allowTaint: true,
-        useCORS: true,
-        imageTimeout: 0,
-        onclone: (clonedDoc) => {
-          // Ensure all images are visible in clone
-          const images = clonedDoc.querySelectorAll('img');
-          images.forEach((img) => {
-            img.style.display = 'block';
-          });
-        },
       });
 
-      // Restore console.error
-      console.error = originalError;
-
-      console.log('Canvas created, converting to image...');
-
-      // Convert to data URL and download
-      const dataURL = canvas.toDataURL('image/png');
       const link = document.createElement('a');
-      link.href = dataURL;
+      link.href = dataUrl;
       link.download = `quadrant-${xQuestion?.prompt.slice(0, 20).replace(/[^a-z0-9]/gi, '-')}-${Date.now()}.png`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-
-      console.log('Download triggered');
     } catch (error) {
       console.error('Failed to export PNG:', error);
     }
