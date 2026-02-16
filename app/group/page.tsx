@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { AvatarUpload } from '@/components/AvatarUpload';
 import { createGroup, createGroupWithMembers } from '../actions';
@@ -14,7 +14,6 @@ interface Member {
 
 export default function GroupPage() {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const [tab, setTab] = useState<'create' | 'join'>('create');
 
   // Create group state
@@ -29,15 +28,6 @@ export default function GroupPage() {
 
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  // Auto-fill join code if provided in URL
-  useEffect(() => {
-    const codeParam = searchParams.get('code');
-    if (codeParam) {
-      setJoinCode(codeParam.toUpperCase());
-      setTab('join');
-    }
-  }, [searchParams]);
 
   const addMember = () => {
     setMembers([...members, { name: '', avatarUrl: null }]);
@@ -265,7 +255,7 @@ export default function GroupPage() {
                     className="flex-1 px-6 py-3 bg-gradient-to-r from-[#00f0ff] to-[#ff00aa] text-black rounded-none font-bold uppercase tracking-wider hover:scale-105 transition-all text-center"
                   >
                     View Group
-                  </button>
+                  </Link>
                 </div>
               </div>
             )}
