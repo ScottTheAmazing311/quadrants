@@ -179,20 +179,20 @@ export function QuadrantGrid({
             {/* Axis labels - repositioned */}
             {/* X-Axis left label (left side where value 1 is) */}
             <div className="absolute right-[52%] bottom-6 text-xs font-bold text-[#00f0ff] uppercase tracking-wider max-w-[150px] text-right">
-              {xQuestion.label_right}
+              {xQuestion.label_left}
             </div>
             {/* X-Axis right label (right side where value 10 is) */}
             <div className="absolute left-[52%] top-6 text-xs font-bold text-[#ff00aa] uppercase tracking-wider max-w-[150px]">
-              {xQuestion.label_left}
+              {xQuestion.label_right}
             </div>
 
-            {/* Y-Axis left label (bottom, where value 1 is) */}
-            <div className="absolute right-6 bottom-[48%] text-xs font-bold text-[#00f0ff] uppercase tracking-wider max-w-[120px] text-right translate-y-full pt-2">
-              {yQuestion.label_right}
-            </div>
-            {/* Y-Axis right label (top, where value 10 is) */}
-            <div className="absolute left-6 top-[48%] text-xs font-bold text-[#ff00aa] uppercase tracking-wider max-w-[120px] -translate-y-full pb-2">
+            {/* Y-Axis left label (top, where value 1 is) */}
+            <div className="absolute left-6 top-[48%] text-xs font-bold text-[#00f0ff] uppercase tracking-wider max-w-[120px] -translate-y-full pb-2">
               {yQuestion.label_left}
+            </div>
+            {/* Y-Axis right label (bottom, where value 10 is) */}
+            <div className="absolute right-6 bottom-[48%] text-xs font-bold text-[#ff00aa] uppercase tracking-wider max-w-[120px] text-right translate-y-full pt-2">
+              {yQuestion.label_right}
             </div>
 
             {/* Player avatars */}
