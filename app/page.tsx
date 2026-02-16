@@ -194,22 +194,44 @@ export default function Home() {
           {/* Current Group Indicator */}
           {currentGroup && (
             <div className="mt-8 w-full flex justify-center">
-              <div className="bg-[#1a1b2e] border-2 border-[#00f0ff]/50 rounded-none p-6">
-                <div className="flex items-center gap-6">
-                  <div>
-                    <p className="text-xs text-[#7a7a9e] uppercase tracking-wider mb-1">Currently In</p>
-                    <p className="text-2xl font-black text-[#00f0ff] neon-text-cyan uppercase tracking-wider">
-                      {currentGroup.name}
-                    </p>
-                    <p className="text-sm text-[#b8b8d1] font-mono mt-1">Code: {currentGroup.code}</p>
+              <div className="bg-[#1a1b2e] border-2 border-[#00f0ff]/50 rounded-none p-6 max-w-3xl w-full">
+                <div className="flex flex-col gap-4">
+                  <div className="flex items-center justify-between gap-6">
+                    <div>
+                      <p className="text-xs text-[#7a7a9e] uppercase tracking-wider mb-1">Currently In</p>
+                      <p className="text-2xl font-black text-[#00f0ff] neon-text-cyan uppercase tracking-wider">
+                        {currentGroup.name}
+                      </p>
+                      <p className="text-sm text-[#b8b8d1] font-mono mt-1">Code: {currentGroup.code}</p>
+                    </div>
+                    <button
+                      onClick={handleChangeGroup}
+                      className="px-6 py-3 border-2 border-[#ff00aa] text-[#ff00aa] rounded-none font-bold uppercase text-xs tracking-wider hover:bg-[#ff00aa] hover:text-black transition-all whitespace-nowrap"
+                    >
+                      Change Group
+                    </button>
                   </div>
-                  <div className="w-px h-16 bg-[#00f0ff]/20"></div>
-                  <button
-                    onClick={handleChangeGroup}
-                    className="px-6 py-3 border-2 border-[#ff00aa] text-[#ff00aa] rounded-none font-bold uppercase text-xs tracking-wider hover:bg-[#ff00aa] hover:text-black transition-all"
-                  >
-                    Change Group
-                  </button>
+
+                  {/* Shareable Link */}
+                  <div className="pt-4 border-t border-[#00f0ff]/20">
+                    <p className="text-xs text-[#7a7a9e] uppercase tracking-wider mb-2">Invite Link</p>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="text"
+                        readOnly
+                        value={`${typeof window !== 'undefined' ? window.location.origin : ''}/group?code=${currentGroup.code}`}
+                        className="flex-1 px-4 py-2 bg-[#0a0b1a] border border-[#00f0ff]/20 text-[#00f0ff] rounded-none font-mono text-sm"
+                      />
+                      <button
+                        onClick={() => {
+                          navigator.clipboard.writeText(`${window.location.origin}/group?code=${currentGroup.code}`);
+                        }}
+                        className="px-4 py-2 border-2 border-[#00f0ff] text-[#00f0ff] rounded-none font-bold uppercase text-xs tracking-wider hover:bg-[#00f0ff] hover:text-black transition-all whitespace-nowrap"
+                      >
+                        Copy Link
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
