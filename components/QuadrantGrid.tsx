@@ -43,13 +43,22 @@ export function QuadrantGrid({
 
     try {
       console.log('Starting html2canvas...');
+      // Temporarily suppress console errors during capture
+      const originalError = console.error;
+      console.error = (...args) => {
+        if (args[0]?.includes?.('Attempting to parse') || args[0]?.includes?.('lab')) {
+          return; // Ignore lab() color errors
+        }
+        originalError(...args);
+      };
+
       const canvas = await html2canvas(gridRef.current, {
         scale: 2,
         backgroundColor: '#0a0b1a',
         logging: false,
         allowTaint: true,
         useCORS: true,
-        imageTimeout: 0, // Don't timeout on images
+        imageTimeout: 0,
         onclone: (clonedDoc) => {
           // Ensure all images are visible in clone
           const images = clonedDoc.querySelectorAll('img');
@@ -58,6 +67,9 @@ export function QuadrantGrid({
           });
         },
       });
+
+      // Restore console.error
+      console.error = originalError;
 
       console.log('Canvas created, converting to image...');
 
