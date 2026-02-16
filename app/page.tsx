@@ -5,13 +5,15 @@ import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
 import { storage } from '@/lib/storage';
 import { QuadCard } from '@/components/QuadCard';
-import { QuadWithQuestions } from '@/types';
+import { QuadWithQuestions, Player } from '@/types';
 
 export default function Home() {
   const [quads, setQuads] = useState<QuadWithQuestions[]>([]);
   const [completedQuadIds, setCompletedQuadIds] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(true);
   const [currentGroup, setCurrentGroup] = useState<{ name: string; code: string } | null>(null);
+  const [groupPlayers, setGroupPlayers] = useState<Player[]>([]);
+  const [quadCompletions, setQuadCompletions] = useState<Map<string, Player[]>>(new Map());
 
   useEffect(() => {
     const loadQuads = async () => {
@@ -86,12 +88,22 @@ export default function Home() {
       if (groupCode) {
         const { data: groupData } = await supabase
           .from('groups')
-          .select('name, code')
+          .select('id, name, code')
           .eq('code', groupCode)
           .single();
 
         if (groupData) {
           setCurrentGroup(groupData);
+
+          // Fetch all players in the group
+          const { data: playersData } = await supabase
+            .from('players')
+            .select('*')
+            .eq('group_id', groupData.id);
+
+          if (playersData) {
+            setGroupPlayers(playersData as Player[]);
+          }
         }
       }
     };
@@ -99,6 +111,51 @@ export default function Home() {
     loadQuads();
     loadCurrentGroup();
   }, []);
+
+  // Calculate quad completions when quads and group players are loaded
+  useEffect(() => {
+    const calculateCompletions = async () => {
+      if (quads.length === 0 || groupPlayers.length === 0) return;
+
+      // Fetch all responses from group members
+      const playerIds = groupPlayers.map(p => p.id);
+      const { data: responsesData } = await supabase
+        .from('responses')
+        .select('player_id, question_id, quad_id')
+        .in('player_id', playerIds);
+
+      if (responsesData) {
+        // Calculate which players completed which quads
+        const completionMap = new Map<string, Player[]>();
+
+        quads.forEach(quad => {
+          const questionIds = quad.questions.map(q => q.id);
+          const completedPlayers: Player[] = [];
+
+          groupPlayers.forEach(player => {
+            const playerResponses = responsesData.filter(
+              r => r.player_id === player.id && r.quad_id === quad.id
+            );
+            const answeredQuestionIds = new Set(playerResponses.map(r => r.question_id));
+
+            // Check if player answered all questions
+            const allAnswered = questionIds.every(qId => answeredQuestionIds.has(qId));
+            if (allAnswered && questionIds.length > 0) {
+              completedPlayers.push(player);
+            }
+          });
+
+          if (completedPlayers.length > 0) {
+            completionMap.set(quad.id, completedPlayers);
+          }
+        });
+
+        setQuadCompletions(completionMap);
+      }
+    };
+
+    calculateCompletions();
+  }, [quads, groupPlayers]);
 
   const handleChangeGroup = () => {
     storage.removeItem('quadrants_player_id');
@@ -255,6 +312,7 @@ export default function Home() {
                   key={quad.id}
                   quad={quad}
                   completed={completedQuadIds.has(quad.id)}
+                  completedPlayers={quadCompletions.get(quad.id) || []}
                 />
               ))}
             </div>

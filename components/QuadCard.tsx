@@ -1,13 +1,15 @@
 import Link from 'next/link';
-import { QuadWithQuestions } from '@/types';
+import { QuadWithQuestions, Player } from '@/types';
+import { Avatar } from './Avatar';
 
 interface QuadCardProps {
   quad: QuadWithQuestions;
   groupCode?: string;
   completed?: boolean;
+  completedPlayers?: Player[];
 }
 
-export function QuadCard({ quad, groupCode, completed = false }: QuadCardProps) {
+export function QuadCard({ quad, groupCode, completed = false, completedPlayers = [] }: QuadCardProps) {
   const playUrl = groupCode
     ? `/play/${quad.id}?group=${groupCode}`
     : `/play/${quad.id}`;
@@ -64,6 +66,28 @@ export function QuadCard({ quad, groupCode, completed = false }: QuadCardProps) 
           </div>
         )}
       </div>
+
+      {/* Completed Group Members */}
+      {completedPlayers.length > 0 && (
+        <div className="mb-4 pb-4 border-b border-[#00f0ff]/20">
+          <p className="text-xs text-[#7a7a9e] uppercase tracking-wider mb-2">Completed By</p>
+          <div className="flex flex-wrap gap-2">
+            {completedPlayers.map(player => (
+              <div key={player.id} className="relative group">
+                <Avatar
+                  imageUrl={player.avatar_url}
+                  name={player.name}
+                  size="sm"
+                />
+                {/* Tooltip */}
+                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-[#00f0ff] text-black text-xs font-bold rounded-none whitespace-nowrap pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity z-10">
+                  {player.name}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Action Buttons */}
       {completed ? (
