@@ -11,6 +11,7 @@ export default function Home() {
   const [quads, setQuads] = useState<QuadWithQuestions[]>([]);
   const [completedQuadIds, setCompletedQuadIds] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(true);
+  const [currentGroup, setCurrentGroup] = useState<{ name: string; code: string } | null>(null);
 
   useEffect(() => {
     const loadQuads = async () => {
@@ -80,8 +81,30 @@ export default function Home() {
       setLoading(false);
     };
 
+    const loadCurrentGroup = async () => {
+      const groupCode = storage.getGroupCode();
+      if (groupCode) {
+        const { data: groupData } = await supabase
+          .from('groups')
+          .select('name, code')
+          .eq('code', groupCode)
+          .single();
+
+        if (groupData) {
+          setCurrentGroup(groupData);
+        }
+      }
+    };
+
     loadQuads();
+    loadCurrentGroup();
   }, []);
+
+  const handleChangeGroup = () => {
+    storage.removeItem('quadrants_player_id');
+    storage.removeItem('quadrants_group_code');
+    window.location.href = '/group';
+  };
 
   if (loading) {
     return (
@@ -149,6 +172,30 @@ export default function Home() {
               Suggest Question
             </Link>
           </div>
+
+          {/* Current Group Indicator */}
+          {currentGroup && (
+            <div className="mb-8 inline-block">
+              <div className="bg-[#1a1b2e] border-2 border-[#00f0ff]/50 rounded-none p-6">
+                <div className="flex items-center gap-6">
+                  <div>
+                    <p className="text-xs text-[#7a7a9e] uppercase tracking-wider mb-1">Currently In</p>
+                    <p className="text-2xl font-black text-[#00f0ff] neon-text-cyan uppercase tracking-wider">
+                      {currentGroup.name}
+                    </p>
+                    <p className="text-sm text-[#b8b8d1] font-mono mt-1">Code: {currentGroup.code}</p>
+                  </div>
+                  <div className="w-px h-16 bg-[#00f0ff]/20"></div>
+                  <button
+                    onClick={handleChangeGroup}
+                    className="px-6 py-3 border-2 border-[#ff00aa] text-[#ff00aa] rounded-none font-bold uppercase text-xs tracking-wider hover:bg-[#ff00aa] hover:text-black transition-all"
+                  >
+                    Change Group
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Stats Bar */}
           <div className="inline-flex gap-8 px-8 py-4 bg-[#1a1b2e] border border-[#00f0ff]/20 rounded-none">
