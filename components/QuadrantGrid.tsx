@@ -44,16 +44,13 @@ export function QuadrantGrid({
     try {
       console.log('Starting html2canvas...');
       const canvas = await html2canvas(gridRef.current, {
-        scale: 3, // Higher resolution
+        scale: 2, // Reduced scale for better compatibility
         backgroundColor: '#0a0b1a',
         logging: false,
         allowTaint: true,
         useCORS: true,
-        ignoreElements: (element) => {
-          // Ignore elements that might have problematic CSS
-          return element.classList?.contains('scanlines') ||
-                 element.classList?.contains('retro-grid');
-        },
+        foreignObjectRendering: true, // Use different rendering method
+        removeContainer: true,
       });
 
       console.log('Canvas created, converting to image...');
