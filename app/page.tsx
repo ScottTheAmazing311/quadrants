@@ -115,14 +115,21 @@ export default function Home() {
   // Calculate quad completions when quads and group players are loaded
   useEffect(() => {
     const calculateCompletions = async () => {
-      if (quads.length === 0 || groupPlayers.length === 0) return;
+      if (quads.length === 0 || groupPlayers.length === 0) {
+        console.log('Skipping completion calc - quads:', quads.length, 'players:', groupPlayers.length);
+        return;
+      }
 
       // Fetch all responses from group members
       const playerIds = groupPlayers.map(p => p.id);
+      console.log('Fetching responses for players:', playerIds);
+
       const { data: responsesData } = await supabase
         .from('responses')
         .select('player_id, question_id, quad_id')
         .in('player_id', playerIds);
+
+      console.log('Got responses:', responsesData?.length);
 
       if (responsesData) {
         // Calculate which players completed which quads
@@ -140,16 +147,20 @@ export default function Home() {
 
             // Check if player answered all questions
             const allAnswered = questionIds.every(qId => answeredQuestionIds.has(qId));
+            console.log(`Quad ${quad.name}, Player ${player.name}: ${answeredQuestionIds.size}/${questionIds.length} answered, completed: ${allAnswered}`);
+
             if (allAnswered && questionIds.length > 0) {
               completedPlayers.push(player);
             }
           });
 
           if (completedPlayers.length > 0) {
+            console.log(`Quad ${quad.name} completed by:`, completedPlayers.map(p => p.name));
             completionMap.set(quad.id, completedPlayers);
           }
         });
 
+        console.log('Final completion map size:', completionMap.size);
         setQuadCompletions(completionMap);
       }
     };
