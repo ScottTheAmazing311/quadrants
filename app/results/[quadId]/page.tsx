@@ -179,11 +179,20 @@ export default function ResultsPage({ params }: { params: Promise<{ quadId: stri
 
           // Only include correlations with reasonable strength (|r| > 0.25)
           if (Math.abs(correlation) > 0.25) {
-            // Calculate means to determine direction
-            const mean1 = values1.reduce((a, b) => a + b, 0) / values1.length;
-            const mean2 = values2.reduce((a, b) => a + b, 0) / values2.length;
+            // Count which quadrant has the most people to determine the right labels
+            let lowLow = 0, lowHigh = 0, highLow = 0, highHigh = 0;
 
-            allCorrelations.push({ q1, q2, coefficient: correlation, mean1, mean2 });
+            for (let i = 0; i < values1.length; i++) {
+              const isLow1 = values1[i] <= 5.5;
+              const isLow2 = values2[i] <= 5.5;
+
+              if (isLow1 && isLow2) lowLow++;
+              else if (isLow1 && !isLow2) lowHigh++;
+              else if (!isLow1 && isLow2) highLow++;
+              else highHigh++;
+            }
+
+            allCorrelations.push({ q1, q2, coefficient: correlation, lowLow, lowHigh, highLow, highHigh });
           }
         }
       }
@@ -214,22 +223,34 @@ export default function ResultsPage({ params }: { params: Promise<{ quadId: stri
       const strength = Math.abs(selectedPair.coefficient);
       const strengthWord = strength > 0.7 ? 'strongly' : strength > 0.4 ? 'moderately' : 'slightly';
 
-      // Determine labels based on correlation type
+      // Determine labels based on which preference combination is most common
       let q1Label: string;
       let q2Label: string;
 
       if (selectedPair.coefficient > 0) {
-        // Positive correlation: both groups move together
-        // Use the majority preference for each question
-        q1Label = selectedPair.mean1 > 5.5 ? selectedPair.q1.label_right : selectedPair.q1.label_left;
-        q2Label = selectedPair.mean2 > 5.5 ? selectedPair.q2.label_right : selectedPair.q2.label_left;
+        // Positive correlation: people cluster in (low,low) or (high,high)
+        // Use the quadrant with more people
+        if (selectedPair.lowLow >= selectedPair.highHigh) {
+          // More people in (low, low) - e.g., Legoland + Elf
+          q1Label = selectedPair.q1.label_left;
+          q2Label = selectedPair.q2.label_left;
+        } else {
+          // More people in (high, high) - e.g., Sea World + Home Alone
+          q1Label = selectedPair.q1.label_right;
+          q2Label = selectedPair.q2.label_right;
+        }
       } else {
-        // Negative correlation: one high, other low
-        // Flip q1 to talk about the minority group (makes a positive statement)
-        // Example: Instead of "People who prefer Elden Ring tend NOT to prefer Beefy 5 Layer"
-        // Say: "People who prefer Breath of the Wild tend to prefer Beefy 5 Layer"
-        q1Label = selectedPair.mean1 > 5.5 ? selectedPair.q1.label_left : selectedPair.q1.label_right;
-        q2Label = selectedPair.mean2 > 5.5 ? selectedPair.q2.label_right : selectedPair.q2.label_left;
+        // Negative correlation: people cluster in (low,high) or (high,low)
+        // Use the quadrant with more people
+        if (selectedPair.lowHigh >= selectedPair.highLow) {
+          // More people in (low, high) - e.g., Legoland + Home Alone
+          q1Label = selectedPair.q1.label_left;
+          q2Label = selectedPair.q2.label_right;
+        } else {
+          // More people in (high, low) - e.g., Sea World + Elf
+          q1Label = selectedPair.q1.label_right;
+          q2Label = selectedPair.q2.label_left;
+        }
       }
 
       setCorrelationMessage(
