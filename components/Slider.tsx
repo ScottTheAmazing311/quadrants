@@ -17,9 +17,21 @@ export function Slider({ value, onChange, leftLabel, rightLabel }: SliderProps) 
   }, [value]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = parseInt(e.target.value);
+    const newValue = parseFloat(e.target.value);
     setLocalValue(newValue);
     onChange(newValue);
+  };
+
+  // Calculate bowtie effect - track gets wider towards extremes
+  const getTrackHeight = (position: number) => {
+    // position is 0-100 representing percentage along track
+    // Convert to value (1-10 scale)
+    const val = 1 + (position / 100) * 9;
+    const distanceFromCenter = Math.abs(val - 5.5);
+    const normalizedDistance = distanceFromCenter / 4.5; // 0 at center, 1 at extremes
+    const minHeight = 8;
+    const maxHeight = 32;
+    return minHeight + (maxHeight - minHeight) * normalizedDistance;
   };
 
   return (
@@ -27,143 +39,173 @@ export function Slider({ value, onChange, leftLabel, rightLabel }: SliderProps) 
       {/* Labels */}
       <div className="flex justify-between px-4">
         <div className="text-left flex-1">
-          <div className="text-xs text-[#7a7a9e] uppercase tracking-wider mb-1">← 1-5</div>
           <div className="text-base font-bold text-rust-primary uppercase tracking-wide">{leftLabel}</div>
         </div>
         <div className="text-right flex-1">
-          <div className="text-xs text-[#7a7a9e] uppercase tracking-wider mb-1">6-10 →</div>
           <div className="text-base font-bold text-amber-secondary uppercase tracking-wide">{rightLabel}</div>
         </div>
       </div>
 
       {/* Slider Container */}
-      <div className="relative px-4">
-        {/* Background Track */}
-        <div className="absolute left-4 right-4 top-1/2 -translate-y-1/2 h-2 bg-bg-warm-2 border-2 border-rust-primary/30 texture-carbon"></div>
+      <div className="relative px-4 py-12">
+        {/* Bowtie Background Track - using SVG for smooth taper */}
+        <svg
+          className="absolute left-4 right-4 top-1/2 -translate-y-1/2 w-[calc(100%-2rem)] pointer-events-none"
+          height="80"
+          preserveAspectRatio="none"
+          viewBox="0 0 100 80"
+        >
+          {/* Background bowtie shape - much more dramatic */}
+          <defs>
+            <linearGradient id="bowtieGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" style={{ stopColor: 'rgba(200, 115, 65, 0.15)' }} />
+              <stop offset="50%" style={{ stopColor: 'rgba(84, 110, 122, 0.1)' }} />
+              <stop offset="100%" style={{ stopColor: 'rgba(255, 152, 0, 0.15)' }} />
+            </linearGradient>
+          </defs>
 
-        {/* Filled Track - Split color design */}
-        <div className="absolute left-4 right-4 top-1/2 -translate-y-1/2 h-2 pointer-events-none transition-all duration-200">
-          <div
-            className="absolute left-0 top-0 h-full bg-rust-primary texture-carbon transition-all duration-200"
-            style={{ width: `${Math.min(((localValue - 1) / 9) * 100, 44.44)}%` }}
-          ></div>
-          <div
-            className="absolute left-1/2 top-0 h-full bg-amber-secondary texture-carbon transition-all duration-200"
-            style={{
-              width: `${Math.max(0, ((localValue - 5.5) / 4.5) * 50)}%`,
-              opacity: localValue > 5.5 ? 1 : 0
-            }}
-          ></div>
-        </div>
+          {/* Main bowtie shape - starts at 60px wide on edges, 12px in center */}
+          <polygon
+            points="0,10 50,34 100,10 100,70 50,46 0,70"
+            fill="url(#bowtieGradient)"
+            stroke="rgba(200, 115, 65, 0.4)"
+            strokeWidth="0.8"
+            className="transition-all duration-300"
+          />
 
-        {/* Tick Marks */}
-        <div className="absolute left-4 right-4 top-1/2 -translate-y-1/2 flex justify-between pointer-events-none">
-          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((tick) => (
-            <div key={tick} className="relative">
-              <div
-                className={`w-0.5 h-4 transition-all ${
-                  tick <= localValue
-                    ? tick <= 5
-                      ? 'bg-rust-primary'
-                      : 'bg-amber-secondary'
-                    : 'bg-bg-warm-3'
-                }`}
-              />
-              <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 text-xs text-[#7a7a9e] font-mono">
-                {tick}
-              </div>
-            </div>
-          ))}
-        </div>
+          {/* Inner bowtie for depth */}
+          <polygon
+            points="0,20 50,36 100,20 100,60 50,44 0,60"
+            fill="rgba(42, 34, 24, 0.6)"
+            stroke="rgba(200, 115, 65, 0.2)"
+            strokeWidth="0.5"
+          />
+        </svg>
+
+        {/* Position indicator - glowing line at thumb position */}
+        <div
+          className="absolute top-1/2 -translate-y-1/2 w-1 pointer-events-none transition-all duration-200"
+          style={{
+            left: `calc(1rem + ${((localValue - 1) / 9) * 100}% - 2px)`,
+            height: `${20 + Math.abs(localValue - 5.5) / 4.5 * 40}px`,
+            background: localValue < 5.5
+              ? 'linear-gradient(to bottom, rgba(200, 115, 65, 0), rgba(200, 115, 65, 0.8), rgba(200, 115, 65, 0))'
+              : 'linear-gradient(to bottom, rgba(255, 152, 0, 0), rgba(255, 152, 0, 0.8), rgba(255, 152, 0, 0))',
+            boxShadow: localValue < 5.5
+              ? '0 0 12px rgba(200, 115, 65, 0.6)'
+              : '0 0 12px rgba(255, 152, 0, 0.6)'
+          }}
+        ></div>
+
+        {/* Center indicator line */}
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-0.5 h-12 bg-steel-gray/40 pointer-events-none"></div>
 
         {/* Input Range */}
         <input
           type="range"
           min="1"
           max="10"
-          step="1"
+          step="0.1"
           value={localValue}
           onChange={handleChange}
           className="w-full relative z-10 appearance-none bg-transparent cursor-pointer slider-retro"
         />
       </div>
 
-      {/* Current Value Display */}
-      <div className="text-center pt-4">
-        <div className="inline-flex items-center gap-3 px-6 py-3 bg-bg-warm-2 border-embossed rounded-none texture-concrete">
-          <div className="text-xs text-[#7a7a9e] uppercase tracking-wider">Value</div>
-          <div className="text-4xl font-black text-rust-primary font-mono">{localValue}</div>
+      {/* Subtle position indicator */}
+      <div className="text-center">
+        <div className="inline-flex items-center gap-2 px-4 py-2 bg-bg-warm-2/50 border border-rust-primary/20 rounded-none">
+          <div className="flex gap-1">
+            {[...Array(10)].map((_, i) => {
+              const dotValue = i + 1;
+              const isActive = Math.round(localValue) >= dotValue;
+              return (
+                <div
+                  key={i}
+                  className={`w-2 h-2 rounded-full transition-all duration-200 ${
+                    isActive
+                      ? dotValue <= 5
+                        ? 'bg-rust-primary'
+                        : 'bg-amber-secondary'
+                      : 'bg-bg-warm-3'
+                  }`}
+                />
+              );
+            })}
+          </div>
         </div>
       </div>
 
       <style jsx>{`
         .slider-retro::-webkit-slider-thumb {
           appearance: none;
-          width: 32px;
-          height: 32px;
+          width: 40px;
+          height: 40px;
           border-radius: 0;
-          background: #c87341;
+          background: ${localValue < 5.5 ? '#c87341' : '#ff9800'};
           background-image:
             radial-gradient(circle at 50% 50%, transparent 30%, rgba(0, 0, 0, 0.3) 30%, rgba(0, 0, 0, 0.3) 35%, transparent 35%),
-            radial-gradient(circle at 50% 50%, transparent 45%, rgba(255, 147, 65, 0.2) 45%, rgba(255, 147, 65, 0.2) 50%, transparent 50%),
+            radial-gradient(circle at 50% 50%, transparent 45%, ${localValue < 5.5 ? 'rgba(255, 147, 65, 0.2)' : 'rgba(255, 152, 0, 0.2)'} 45%, ${localValue < 5.5 ? 'rgba(255, 147, 65, 0.2)' : 'rgba(255, 152, 0, 0.2)'} 50%, transparent 50%),
             radial-gradient(circle at 50% 50%, transparent 60%, rgba(0, 0, 0, 0.2) 60%, rgba(0, 0, 0, 0.2) 65%, transparent 65%);
           border: 3px solid #1a1410;
           box-shadow:
-            0 0 0 2px #c87341,
+            0 0 0 3px ${localValue < 5.5 ? '#c87341' : '#ff9800'},
             inset 0 2px 4px rgba(0, 0, 0, 0.3),
-            inset 0 -2px 4px rgba(255, 147, 65, 0.1),
-            0 4px 8px rgba(0, 0, 0, 0.4);
-          cursor: pointer;
+            inset 0 -2px 4px ${localValue < 5.5 ? 'rgba(255, 147, 65, 0.1)' : 'rgba(255, 152, 0, 0.1)'},
+            0 6px 12px rgba(0, 0, 0, 0.5),
+            0 0 20px ${localValue < 5.5 ? 'rgba(200, 115, 65, 0.4)' : 'rgba(255, 152, 0, 0.4)'};
+          cursor: grab;
           transition: all 0.2s ease;
         }
 
         .slider-retro::-webkit-slider-thumb:hover {
           transform: scale(1.15);
-          background: #ff9800;
           box-shadow:
-            0 0 0 2px #ff9800,
+            0 0 0 3px ${localValue < 5.5 ? '#c87341' : '#ff9800'},
             inset 0 2px 4px rgba(0, 0, 0, 0.3),
-            inset 0 -2px 4px rgba(255, 152, 0, 0.15),
-            0 6px 12px rgba(0, 0, 0, 0.5),
-            0 2px 8px rgba(200, 115, 65, 0.3);
+            inset 0 -2px 4px ${localValue < 5.5 ? 'rgba(255, 147, 65, 0.15)' : 'rgba(255, 152, 0, 0.15)'},
+            0 8px 16px rgba(0, 0, 0, 0.6),
+            0 0 30px ${localValue < 5.5 ? 'rgba(200, 115, 65, 0.6)' : 'rgba(255, 152, 0, 0.6)'};
         }
 
         .slider-retro::-webkit-slider-thumb:active {
           transform: scale(1.05);
+          cursor: grabbing;
         }
 
         .slider-retro::-moz-range-thumb {
-          width: 32px;
-          height: 32px;
+          width: 40px;
+          height: 40px;
           border-radius: 0;
-          background: #c87341;
+          background: ${localValue < 5.5 ? '#c87341' : '#ff9800'};
           background-image:
             radial-gradient(circle at 50% 50%, transparent 30%, rgba(0, 0, 0, 0.3) 30%, rgba(0, 0, 0, 0.3) 35%, transparent 35%),
-            radial-gradient(circle at 50% 50%, transparent 45%, rgba(255, 147, 65, 0.2) 45%, rgba(255, 147, 65, 0.2) 50%, transparent 50%),
+            radial-gradient(circle at 50% 50%, transparent 45%, ${localValue < 5.5 ? 'rgba(255, 147, 65, 0.2)' : 'rgba(255, 152, 0, 0.2)'} 45%, ${localValue < 5.5 ? 'rgba(255, 147, 65, 0.2)' : 'rgba(255, 152, 0, 0.2)'} 50%, transparent 50%),
             radial-gradient(circle at 50% 50%, transparent 60%, rgba(0, 0, 0, 0.2) 60%, rgba(0, 0, 0, 0.2) 65%, transparent 65%);
           border: 3px solid #1a1410;
           box-shadow:
-            0 0 0 2px #c87341,
+            0 0 0 3px ${localValue < 5.5 ? '#c87341' : '#ff9800'},
             inset 0 2px 4px rgba(0, 0, 0, 0.3),
-            inset 0 -2px 4px rgba(255, 147, 65, 0.1),
-            0 4px 8px rgba(0, 0, 0, 0.4);
-          cursor: pointer;
+            inset 0 -2px 4px ${localValue < 5.5 ? 'rgba(255, 147, 65, 0.1)' : 'rgba(255, 152, 0, 0.1)'},
+            0 6px 12px rgba(0, 0, 0, 0.5),
+            0 0 20px ${localValue < 5.5 ? 'rgba(200, 115, 65, 0.4)' : 'rgba(255, 152, 0, 0.4)'};
+          cursor: grab;
           transition: all 0.2s ease;
         }
 
         .slider-retro::-moz-range-thumb:hover {
           transform: scale(1.15);
-          background: #ff9800;
           box-shadow:
-            0 0 0 2px #ff9800,
+            0 0 0 3px ${localValue < 5.5 ? '#c87341' : '#ff9800'},
             inset 0 2px 4px rgba(0, 0, 0, 0.3),
-            inset 0 -2px 4px rgba(255, 152, 0, 0.15),
-            0 6px 12px rgba(0, 0, 0, 0.5),
-            0 2px 8px rgba(200, 115, 65, 0.3);
+            inset 0 -2px 4px ${localValue < 5.5 ? 'rgba(255, 147, 65, 0.15)' : 'rgba(255, 152, 0, 0.15)'},
+            0 8px 16px rgba(0, 0, 0, 0.6),
+            0 0 30px ${localValue < 5.5 ? 'rgba(200, 115, 65, 0.6)' : 'rgba(255, 152, 0, 0.6)'};
         }
 
         .slider-retro::-moz-range-thumb:active {
           transform: scale(1.05);
+          cursor: grabbing;
         }
       `}</style>
     </div>
