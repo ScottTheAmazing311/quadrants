@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
+import { bulkImportQuestions } from '../actions';
 
 interface QuestionSuggestion {
   id: string;
@@ -33,6 +34,8 @@ export default function AdminPage() {
   });
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [importing, setImporting] = useState(false);
+  const [importResults, setImportResults] = useState<{ total: number; added: number; skipped: number; errors: number } | null>(null);
 
   useEffect(() => {
     loadQuestions();
@@ -163,6 +166,24 @@ export default function AdminPage() {
     }
   };
 
+  const handleBulkImport = async () => {
+    if (!confirm('This will import 106 predefined questions. Questions that already exist will be skipped. Continue?')) {
+      return;
+    }
+
+    setImporting(true);
+    try {
+      const results = await bulkImportQuestions();
+      setImportResults(results);
+      loadQuestions();
+    } catch (error) {
+      console.error('Error importing questions:', error);
+      alert('Failed to import questions');
+    } finally {
+      setImporting(false);
+    }
+  };
+
   const filteredQuestions = questions.filter(q =>
     q.prompt.toLowerCase().includes(searchTerm.toLowerCase()) ||
     q.label_left.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -213,6 +234,17 @@ export default function AdminPage() {
                 Delete Selected ({selectedIds.size})
               </button>
             )}
+            <button
+              onClick={handleBulkImport}
+              disabled={importing}
+              className="px-6 py-3 bg-rust-primary texture-brushed text-black rounded-none font-bold uppercase text-sm tracking-wider hover:scale-105 transition-all disabled:opacity-50"
+              style={{
+                boxShadow: 'inset 0 1px 2px rgba(255, 147, 65, 0.2), inset 0 -1px 2px rgba(0, 0, 0, 0.3), 0 4px 8px rgba(0, 0, 0, 0.3)',
+                textShadow: '0 1px 2px rgba(0, 0, 0, 0.5)'
+              }}
+            >
+              {importing ? 'Importing...' : '↓ Import 106 Questions'}
+            </button>
             <button
               onClick={() => setShowAddForm(true)}
               className="px-6 py-3 bg-burnt-orange texture-brushed text-black rounded-none font-bold uppercase text-sm tracking-wider hover:scale-105 transition-all"
@@ -345,6 +377,55 @@ export default function AdminPage() {
                   Cancel
                 </button>
               </div>
+            </div>
+          </div>
+        )}
+
+        {/* Import Results Modal */}
+        {importResults && (
+          <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
+            <div className="premium-card rounded-none p-8 max-w-lg w-full">
+              <h2 className="text-2xl font-black text-white uppercase mb-6">Import Complete</h2>
+
+              <div className="space-y-4 mb-6">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="px-6 py-4 bg-bg-warm-2 border-2 border-rust-primary/30 rounded-none texture-concrete">
+                    <div className="text-3xl font-black text-rust-primary">{importResults.total}</div>
+                    <div className="text-xs text-[#7a7a9e] uppercase tracking-wider">Total in Import</div>
+                  </div>
+                  <div className="px-6 py-4 bg-bg-warm-2 border-2 border-burnt-orange/30 rounded-none texture-concrete">
+                    <div className="text-3xl font-black text-burnt-orange">{importResults.added}</div>
+                    <div className="text-xs text-[#7a7a9e] uppercase tracking-wider">Added</div>
+                  </div>
+                  <div className="px-6 py-4 bg-bg-warm-2 border-2 border-amber-secondary/30 rounded-none texture-concrete">
+                    <div className="text-3xl font-black text-amber-secondary">{importResults.skipped}</div>
+                    <div className="text-xs text-[#7a7a9e] uppercase tracking-wider">Skipped (Duplicates)</div>
+                  </div>
+                  <div className="px-6 py-4 bg-bg-warm-2 border-2 border-steel-gray/30 rounded-none texture-concrete">
+                    <div className="text-3xl font-black text-steel-gray">{importResults.errors}</div>
+                    <div className="text-xs text-[#7a7a9e] uppercase tracking-wider">Errors</div>
+                  </div>
+                </div>
+
+                {importResults.added > 0 && (
+                  <div className="p-4 bg-burnt-orange/20 border-2 border-burnt-orange rounded-none">
+                    <p className="text-burnt-orange font-bold uppercase text-sm tracking-wider">
+                      ✓ Successfully added {importResults.added} new question{importResults.added !== 1 ? 's' : ''} to the bank!
+                    </p>
+                  </div>
+                )}
+              </div>
+
+              <button
+                onClick={() => setImportResults(null)}
+                className="w-full py-3 bg-rust-primary texture-brushed text-black rounded-none font-bold uppercase text-sm tracking-wider hover:scale-105 transition-all"
+                style={{
+                  boxShadow: 'inset 0 1px 2px rgba(255, 147, 65, 0.2), inset 0 -1px 2px rgba(0, 0, 0, 0.3), 0 4px 8px rgba(0, 0, 0, 0.3)',
+                  textShadow: '0 1px 2px rgba(0, 0, 0, 0.5)'
+                }}
+              >
+                Close
+              </button>
             </div>
           </div>
         )}
