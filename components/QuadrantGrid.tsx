@@ -177,18 +177,18 @@ export function QuadrantGrid({
 
         {/* Axis selectors with buttons */}
         {onAxisChange && shouldShowSelectors ? (
-          <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr_300px] gap-8 items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-[220px_1fr_220px] gap-6 items-start">
           {/* X-Axis questions (left side) */}
           <div>
-            <h3 className="text-sm font-bold text-[#7a7a9e] uppercase tracking-wider mb-3">
+            <h3 className="text-xs font-bold text-[#7a7a9e] uppercase tracking-wider mb-2">
               X-Axis (Horizontal)
             </h3>
-            <div className="space-y-2 max-h-96 overflow-y-auto pr-2">
+            <div className="space-y-1.5 max-h-96 overflow-y-auto pr-1">
               {questions.map(q => (
                 <button
                   key={q.id}
                   onClick={() => onAxisChange('x', q.id)}
-                  className={`w-full text-left px-4 py-3 rounded-none transition-all text-sm ${
+                  className={`w-full text-left px-3 py-2 rounded-none transition-all text-xs ${
                     selectedXQuestionId === q.id
                       ? 'bg-rust-primary texture-brushed text-black font-bold'
                       : 'bg-bg-warm-2 border-2 border-rust-primary/30 text-[#b8b8d1] hover:border-rust-primary hover:text-white texture-concrete'
@@ -205,7 +205,7 @@ export function QuadrantGrid({
           </div>
 
           {/* Grid (center) */}
-          <div className="relative w-full aspect-square max-w-4xl mx-auto bg-bg-warm-1 rounded-none border-embossed p-8 texture-concrete">
+          <div className="relative w-full aspect-square max-w-5xl mx-auto bg-bg-warm-1 rounded-none border-embossed p-8 texture-concrete">
             {/* Quadrant backgrounds with textures */}
             <div className="absolute inset-8 grid grid-cols-2 grid-rows-2 pointer-events-none">
               <div className="bg-rust-primary/5 texture-dots"></div>
@@ -275,15 +275,15 @@ export function QuadrantGrid({
 
           {/* Y-Axis questions (right side) */}
           <div>
-            <h3 className="text-sm font-bold text-[#7a7a9e] uppercase tracking-wider mb-3">
+            <h3 className="text-xs font-bold text-[#7a7a9e] uppercase tracking-wider mb-2">
               Y-Axis (Vertical)
             </h3>
-            <div className="space-y-2 max-h-96 overflow-y-auto pl-2">
+            <div className="space-y-1.5 max-h-96 overflow-y-auto pl-1">
               {questions.map(q => (
                 <button
                   key={q.id}
                   onClick={() => onAxisChange('y', q.id)}
-                  className={`w-full text-left px-4 py-3 rounded-none transition-all text-sm ${
+                  className={`w-full text-left px-3 py-2 rounded-none transition-all text-xs ${
                     selectedYQuestionId === q.id
                       ? 'bg-amber-secondary texture-brushed text-black font-bold'
                       : 'bg-bg-warm-2 border-2 border-amber-secondary/30 text-[#b8b8d1] hover:border-amber-secondary hover:text-white texture-concrete'
