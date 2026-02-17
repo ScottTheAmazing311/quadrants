@@ -31,6 +31,7 @@ export function QuadrantGrid({
   onAxisChange
 }: QuadrantGridProps) {
   const [hoveredPlayer, setHoveredPlayer] = useState<string | null>(null);
+  const [showAxisSelectors, setShowAxisSelectors] = useState(true);
   const gridRef = useRef<HTMLDivElement>(null);
 
   const handleExportPNG = async () => {
@@ -127,8 +128,16 @@ export function QuadrantGrid({
 
   return (
     <div className="space-y-8">
-      {/* Export Button */}
-      <div className="flex justify-end">
+      {/* Action Buttons */}
+      <div className="flex justify-end gap-3">
+        {onAxisChange && (
+          <button
+            onClick={() => setShowAxisSelectors(!showAxisSelectors)}
+            className="px-6 py-3 border-2 border-rust-primary text-rust-primary rounded-none font-bold uppercase text-xs tracking-wider hover:bg-rust-primary hover:text-black transition-all"
+          >
+            {showAxisSelectors ? 'Hide' : 'Show'} Questions
+          </button>
+        )}
         <button
           onClick={handleExportPNG}
           className="px-6 py-3 bg-rust-primary texture-brushed text-black rounded-none font-bold uppercase text-xs tracking-wider hover:scale-105 transition-all"
@@ -162,7 +171,7 @@ export function QuadrantGrid({
         </div>
 
         {/* Axis selectors with buttons */}
-        {onAxisChange && (
+        {onAxisChange && showAxisSelectors ? (
           <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr_300px] gap-8 items-start">
           {/* X-Axis questions (left side) */}
           <div>
@@ -285,6 +294,77 @@ export function QuadrantGrid({
             </div>
           </div>
         </div>
+        ) : (
+          // Grid only view (larger)
+          <div className="max-w-6xl mx-auto">
+            <div className="relative w-full aspect-square bg-bg-warm-1 rounded-none border-embossed p-8 texture-concrete">
+              {/* Quadrant backgrounds with textures */}
+              <div className="absolute inset-8 grid grid-cols-2 grid-rows-2 pointer-events-none">
+                <div className="bg-rust-primary/5 texture-dots"></div>
+                <div className="bg-amber-secondary/5 texture-diagonal"></div>
+                <div className="bg-burnt-orange/5 texture-dots"></div>
+                <div className="bg-steel-gray/5 texture-diagonal"></div>
+              </div>
+
+              {/* Axes - Blueprint style */}
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                <div className="absolute w-full h-0.5 bg-steel-gray"></div>
+                <div className="absolute h-full w-0.5 bg-steel-gray"></div>
+              </div>
+
+              {/* Axis labels - repositioned */}
+              {/* X-Axis left label (left side where value 1 is) */}
+              <div className="absolute right-[52%] bottom-6 text-xs font-bold text-rust-primary uppercase tracking-wider max-w-[150px] text-right">
+                {yQuestion.label_left}
+              </div>
+              {/* X-Axis right label (right side where value 10 is) */}
+              <div className="absolute left-[52%] top-6 text-xs font-bold text-amber-secondary uppercase tracking-wider max-w-[150px]">
+                {yQuestion.label_right}
+              </div>
+
+              {/* Y-Axis left label (top, where value 1 is) */}
+              <div className="absolute left-6 top-[48%] text-xs font-bold text-rust-primary uppercase tracking-wider max-w-[120px] -translate-y-full pb-2">
+                {xQuestion.label_left}
+              </div>
+              {/* Y-Axis right label (bottom, where value 10 is) */}
+              <div className="absolute right-6 bottom-[48%] text-xs font-bold text-amber-secondary uppercase tracking-wider max-w-[120px] text-right translate-y-full pt-2">
+                {xQuestion.label_right}
+              </div>
+
+              {/* Player avatars */}
+              <div className="absolute inset-0">
+                {playerPositions.map(({ player, x, y, offsetX, offsetY }) => (
+                  <div
+                    key={player.id}
+                    className="absolute transition-all duration-500 ease-in-out"
+                    style={{
+                      left: `calc(${x}% + ${offsetX}%)`,
+                      top: `calc(${y}% + ${offsetY}%)`,
+                      transform: 'translate(-50%, -50%)'
+                    }}
+                    onMouseEnter={() => setHoveredPlayer(player.id)}
+                    onMouseLeave={() => setHoveredPlayer(null)}
+                  >
+                    <div className={`transition-transform ${hoveredPlayer === player.id ? 'scale-110' : ''}`}>
+                      <Avatar
+                        imageUrl={player.avatar_url}
+                        name={player.name}
+                        size="md"
+                      />
+                    </div>
+
+                    {/* Tooltip */}
+                    {hoveredPlayer === player.id && (
+                      <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2 bg-rust-primary text-black text-sm font-bold rounded-none whitespace-nowrap pointer-events-none z-10 uppercase tracking-wider warm-glow">
+                        {player.name}
+                        <div className="absolute top-full left-1/2 -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-rust-primary"></div>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
         )}
 
         {/* Legend */}
