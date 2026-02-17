@@ -215,7 +215,7 @@ export default function ResultsPage({ params }: { params: Promise<{ quadId: stri
       const q2Label = selectedPair.coefficient > 0 ? selectedPair.q2.label_right : selectedPair.q2.label_left;
 
       setCorrelationMessage(
-        `People who prefer "${q1Label}" ${strengthWord} ${direction} prefer "${q2Label}" (r = ${selectedPair.coefficient.toFixed(2)})`
+        `People who prefer "${q1Label}" ${strengthWord} ${direction} prefer "${q2Label}"`
       );
     } else {
       setCorrelationMessage("No significant correlations found");
