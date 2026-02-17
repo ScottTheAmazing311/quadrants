@@ -35,7 +35,7 @@ export function QuadrantGrid({
 
   const handleExportPNG = async () => {
     if (!gridRef.current) {
-      console.error('Grid ref not found');
+      console.error('Export container ref not found');
       return;
     }
 
@@ -43,7 +43,7 @@ export function QuadrantGrid({
       const dataUrl = await toPng(gridRef.current, {
         quality: 1,
         pixelRatio: 3,
-        backgroundColor: '#0a0b1a',
+        backgroundColor: '#1a1410',
       });
 
       const link = document.createElement('a');
@@ -141,9 +141,29 @@ export function QuadrantGrid({
         </button>
       </div>
 
-      {/* Axis selectors with buttons */}
-      {onAxisChange && (
-        <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr_300px] gap-8 items-start">
+      {/* Export Container - includes everything that will be exported */}
+      <div ref={gridRef} className="bg-bg-warm-1 p-8 rounded-none">
+        {/* Title Section */}
+        <div className="mb-8 text-center">
+          <h2 className="text-3xl font-black text-rust-primary uppercase tracking-wider mb-4">
+            Quadrant Analysis
+          </h2>
+          <div className="flex justify-center gap-8 text-sm">
+            <div>
+              <span className="text-[#7a7a9e] uppercase tracking-wider">X-Axis: </span>
+              <span className="text-white font-bold">{xQuestion?.prompt}</span>
+            </div>
+            <div className="w-px bg-rust-primary/30"></div>
+            <div>
+              <span className="text-[#7a7a9e] uppercase tracking-wider">Y-Axis: </span>
+              <span className="text-white font-bold">{yQuestion?.prompt}</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Axis selectors with buttons */}
+        {onAxisChange && (
+          <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr_300px] gap-8 items-start">
           {/* X-Axis questions (left side) */}
           <div>
             <h3 className="text-sm font-bold text-[#7a7a9e] uppercase tracking-wider mb-3">
@@ -171,7 +191,7 @@ export function QuadrantGrid({
           </div>
 
           {/* Grid (center) */}
-          <div ref={gridRef} className="relative w-full aspect-square max-w-4xl mx-auto bg-bg-warm-1 rounded-none border-embossed p-8 texture-concrete">
+          <div className="relative w-full aspect-square max-w-4xl mx-auto bg-bg-warm-1 rounded-none border-embossed p-8 texture-concrete">
             {/* Quadrant backgrounds with textures */}
             <div className="absolute inset-8 grid grid-cols-2 grid-rows-2 pointer-events-none">
               <div className="bg-rust-primary/5 texture-dots"></div>
@@ -265,11 +285,12 @@ export function QuadrantGrid({
             </div>
           </div>
         </div>
-      )}
+        )}
 
-      {/* Legend */}
-      <div className="text-center text-sm text-[#7a7a9e] uppercase tracking-wider">
-        Hover over avatars to see names
+        {/* Legend */}
+        <div className="text-center text-sm text-[#7a7a9e] uppercase tracking-wider mt-8">
+          Hover over avatars to see names
+        </div>
       </div>
     </div>
   );
