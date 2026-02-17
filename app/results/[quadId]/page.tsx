@@ -20,6 +20,7 @@ export default function ResultsPage({ params }: { params: Promise<{ quadId: stri
   const [loading, setLoading] = useState(true);
   const [correlationMessage, setCorrelationMessage] = useState<string | null>(null);
   const [showingCorrelation, setShowingCorrelation] = useState(false);
+  const [currentCorrelationPair, setCurrentCorrelationPair] = useState<{ q1Id: string; q2Id: string } | null>(null);
 
   useEffect(() => {
     const loadData = async () => {
@@ -143,14 +144,21 @@ export default function ResultsPage({ params }: { params: Promise<{ quadId: stri
       return;
     }
 
-    let bestCorrelation = 0;
-    let bestPair: { q1: Question; q2: Question; coefficient: number } | null = null;
+    // Find all correlations above a threshold
+    const allCorrelations: { q1: Question; q2: Question; coefficient: number }[] = [];
 
     // Check all pairs of questions
     for (let i = 0; i < questions.length; i++) {
       for (let j = i + 1; j < questions.length; j++) {
         const q1 = questions[i];
         const q2 = questions[j];
+
+        // Skip if this is the currently displayed pair
+        if (currentCorrelationPair &&
+            ((currentCorrelationPair.q1Id === q1.id && currentCorrelationPair.q2Id === q2.id) ||
+             (currentCorrelationPair.q1Id === q2.id && currentCorrelationPair.q2Id === q1.id))) {
+          continue;
+        }
 
         // Get all player responses for both questions
         const values1: number[] = [];
@@ -169,31 +177,45 @@ export default function ResultsPage({ params }: { params: Promise<{ quadId: stri
         if (values1.length >= 2) {
           const correlation = calculateCorrelation(values1, values2);
 
-          // Look for strong correlations (positive or negative)
-          if (Math.abs(correlation) > Math.abs(bestCorrelation)) {
-            bestCorrelation = correlation;
-            bestPair = { q1, q2, coefficient: correlation };
+          // Only include correlations with reasonable strength (|r| > 0.25)
+          if (Math.abs(correlation) > 0.25) {
+            allCorrelations.push({ q1, q2, coefficient: correlation });
           }
         }
       }
     }
 
-    if (bestPair) {
+    // If no new correlations found, reset and try again with all pairs
+    if (allCorrelations.length === 0 && currentCorrelationPair) {
+      setCurrentCorrelationPair(null);
+      findInterestingCorrelation();
+      return;
+    }
+
+    if (allCorrelations.length > 0) {
+      // Sort by strength and pick a random one from the top correlations
+      allCorrelations.sort((a, b) => Math.abs(b.coefficient) - Math.abs(a.coefficient));
+
+      // Take top 3 correlations (or all if less than 3) and pick randomly
+      const topCorrelations = allCorrelations.slice(0, Math.min(3, allCorrelations.length));
+      const selectedPair = topCorrelations[Math.floor(Math.random() * topCorrelations.length)];
+
       // Update the grid to show this correlation
-      setSelectedXQuestionId(bestPair.q1.id);
-      setSelectedYQuestionId(bestPair.q2.id);
+      setSelectedXQuestionId(selectedPair.q1.id);
+      setSelectedYQuestionId(selectedPair.q2.id);
       setShowingCorrelation(true);
+      setCurrentCorrelationPair({ q1Id: selectedPair.q1.id, q2Id: selectedPair.q2.id });
 
       // Generate correlation message
-      const strength = Math.abs(bestPair.coefficient);
-      const direction = bestPair.coefficient > 0 ? 'also tend to' : 'tend NOT to';
+      const strength = Math.abs(selectedPair.coefficient);
+      const direction = selectedPair.coefficient > 0 ? 'also tend to' : 'tend NOT to';
       const strengthWord = strength > 0.7 ? 'strongly' : strength > 0.4 ? 'moderately' : 'slightly';
 
-      const q1Label = bestPair.coefficient > 0 ? bestPair.q1.label_right : bestPair.q1.label_left;
-      const q2Label = bestPair.coefficient > 0 ? bestPair.q2.label_right : bestPair.q2.label_left;
+      const q1Label = selectedPair.coefficient > 0 ? selectedPair.q1.label_right : selectedPair.q1.label_left;
+      const q2Label = selectedPair.coefficient > 0 ? selectedPair.q2.label_right : selectedPair.q2.label_left;
 
       setCorrelationMessage(
-        `People who prefer "${q1Label}" ${strengthWord} ${direction} prefer "${q2Label}" (r = ${bestPair.coefficient.toFixed(2)})`
+        `People who prefer "${q1Label}" ${strengthWord} ${direction} prefer "${q2Label}" (r = ${selectedPair.coefficient.toFixed(2)})`
       );
     } else {
       setCorrelationMessage("No significant correlations found");
@@ -276,6 +298,7 @@ export default function ResultsPage({ params }: { params: Promise<{ quadId: stri
                       onClick={() => {
                         setCorrelationMessage(null);
                         setShowingCorrelation(false);
+                        setCurrentCorrelationPair(null);
                       }}
                       className="ml-auto text-burnt-orange hover:text-amber-secondary transition-colors"
                     >
@@ -304,6 +327,7 @@ export default function ResultsPage({ params }: { params: Promise<{ quadId: stri
                   if (showingCorrelation) {
                     setShowingCorrelation(false);
                     setCorrelationMessage(null);
+                    setCurrentCorrelationPair(null);
                   }
                 }}
               />
