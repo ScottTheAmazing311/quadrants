@@ -179,7 +179,11 @@ export default function ResultsPage({ params }: { params: Promise<{ quadId: stri
 
           // Only include correlations with reasonable strength (|r| > 0.25)
           if (Math.abs(correlation) > 0.25) {
-            allCorrelations.push({ q1, q2, coefficient: correlation });
+            // Calculate means to determine direction
+            const mean1 = values1.reduce((a, b) => a + b, 0) / values1.length;
+            const mean2 = values2.reduce((a, b) => a + b, 0) / values2.length;
+
+            allCorrelations.push({ q1, q2, coefficient: correlation, mean1, mean2 });
           }
         }
       }
@@ -208,11 +212,21 @@ export default function ResultsPage({ params }: { params: Promise<{ quadId: stri
 
       // Generate correlation message
       const strength = Math.abs(selectedPair.coefficient);
-      const direction = selectedPair.coefficient > 0 ? 'also tend to' : 'tend NOT to';
       const strengthWord = strength > 0.7 ? 'strongly' : strength > 0.4 ? 'moderately' : 'slightly';
 
-      const q1Label = selectedPair.coefficient > 0 ? selectedPair.q1.label_right : selectedPair.q1.label_left;
-      const q2Label = selectedPair.coefficient > 0 ? selectedPair.q2.label_right : selectedPair.q2.label_left;
+      // Use means to determine which label to display (> 5.5 = right label, < 5.5 = left label)
+      const q1Label = selectedPair.mean1 > 5.5 ? selectedPair.q1.label_right : selectedPair.q1.label_left;
+      const q2Label = selectedPair.mean2 > 5.5 ? selectedPair.q2.label_right : selectedPair.q2.label_left;
+
+      // Determine relationship based on correlation sign and means
+      let direction: string;
+      if (selectedPair.coefficient > 0) {
+        // Positive correlation: both high or both low
+        direction = 'also tend to';
+      } else {
+        // Negative correlation: one high, one low
+        direction = 'tend NOT to';
+      }
 
       setCorrelationMessage(
         `People who prefer "${q1Label}" ${strengthWord} ${direction} prefer "${q2Label}"`
