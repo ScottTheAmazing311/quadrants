@@ -18,6 +18,7 @@ export default function ResultsPage({ params }: { params: Promise<{ quadId: stri
   const [groupCode, setGroupCode] = useState<string | null>(null);
   const [isSoloMode, setIsSoloMode] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [correlationMessage, setCorrelationMessage] = useState<string | null>(null);
 
   useEffect(() => {
     const loadData = async () => {
@@ -111,6 +112,92 @@ export default function ResultsPage({ params }: { params: Promise<{ quadId: stri
     loadData();
   }, [quadId]);
 
+  // Calculate Pearson correlation coefficient
+  const calculateCorrelation = (values1: number[], values2: number[]): number => {
+    const n = values1.length;
+    if (n === 0) return 0;
+
+    const mean1 = values1.reduce((a, b) => a + b, 0) / n;
+    const mean2 = values2.reduce((a, b) => a + b, 0) / n;
+
+    let numerator = 0;
+    let sum1 = 0;
+    let sum2 = 0;
+
+    for (let i = 0; i < n; i++) {
+      const diff1 = values1[i] - mean1;
+      const diff2 = values2[i] - mean2;
+      numerator += diff1 * diff2;
+      sum1 += diff1 * diff1;
+      sum2 += diff2 * diff2;
+    }
+
+    const denominator = Math.sqrt(sum1 * sum2);
+    return denominator === 0 ? 0 : numerator / denominator;
+  };
+
+  const findInterestingCorrelation = () => {
+    if (questions.length < 2 || players.length < 2) {
+      setCorrelationMessage("Need at least 2 questions and 2 players to find correlations");
+      return;
+    }
+
+    let bestCorrelation = 0;
+    let bestPair: { q1: Question; q2: Question; coefficient: number } | null = null;
+
+    // Check all pairs of questions
+    for (let i = 0; i < questions.length; i++) {
+      for (let j = i + 1; j < questions.length; j++) {
+        const q1 = questions[i];
+        const q2 = questions[j];
+
+        // Get all player responses for both questions
+        const values1: number[] = [];
+        const values2: number[] = [];
+
+        players.forEach(player => {
+          const r1 = responses.find(r => r.player_id === player.id && r.question_id === q1.id);
+          const r2 = responses.find(r => r.player_id === player.id && r.question_id === q2.id);
+
+          if (r1 && r2) {
+            values1.push(r1.value);
+            values2.push(r2.value);
+          }
+        });
+
+        if (values1.length >= 2) {
+          const correlation = calculateCorrelation(values1, values2);
+
+          // Look for strong correlations (positive or negative)
+          if (Math.abs(correlation) > Math.abs(bestCorrelation)) {
+            bestCorrelation = correlation;
+            bestPair = { q1, q2, coefficient: correlation };
+          }
+        }
+      }
+    }
+
+    if (bestPair) {
+      // Update the grid to show this correlation
+      setSelectedXQuestionId(bestPair.q1.id);
+      setSelectedYQuestionId(bestPair.q2.id);
+
+      // Generate correlation message
+      const strength = Math.abs(bestPair.coefficient);
+      const direction = bestPair.coefficient > 0 ? 'also tend to' : 'tend NOT to';
+      const strengthWord = strength > 0.7 ? 'strongly' : strength > 0.4 ? 'moderately' : 'slightly';
+
+      const q1Label = bestPair.coefficient > 0 ? bestPair.q1.label_right : bestPair.q1.label_left;
+      const q2Label = bestPair.coefficient > 0 ? bestPair.q2.label_right : bestPair.q2.label_left;
+
+      setCorrelationMessage(
+        `People who prefer "${q1Label}" ${strengthWord} ${direction} prefer "${q2Label}" (r = ${bestPair.coefficient.toFixed(2)})`
+      );
+    } else {
+      setCorrelationMessage("No significant correlations found");
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen industrial-base relative flex items-center justify-center">
@@ -172,6 +259,28 @@ export default function ResultsPage({ params }: { params: Promise<{ quadId: stri
             </div>
           ) : (
             <>
+              {correlationMessage && (
+                <div className="mb-6 p-6 bg-burnt-orange/20 border-2 border-burnt-orange rounded-none texture-concrete">
+                  <div className="flex items-start gap-3">
+                    <svg className="w-6 h-6 text-burnt-orange flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                    <div>
+                      <h3 className="text-burnt-orange font-black uppercase tracking-wider text-sm mb-2">Correlation Found!</h3>
+                      <p className="text-white font-bold">{correlationMessage}</p>
+                    </div>
+                    <button
+                      onClick={() => setCorrelationMessage(null)}
+                      className="ml-auto text-burnt-orange hover:text-amber-secondary transition-colors"
+                    >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              )}
+
               <QuadrantGrid
                 questions={questions}
                 responses={responses}
@@ -188,10 +297,24 @@ export default function ResultsPage({ params }: { params: Promise<{ quadId: stri
               />
 
               <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
+                <button
+                  onClick={findInterestingCorrelation}
+                  className="px-6 py-3 bg-burnt-orange texture-brushed text-black rounded-none font-bold uppercase tracking-wider hover:scale-105 transition-all text-center"
+                  style={{
+                    boxShadow: 'inset 0 1px 2px rgba(255, 111, 60, 0.2), inset 0 -1px 2px rgba(0, 0, 0, 0.3), 0 4px 8px rgba(0, 0, 0, 0.3)',
+                    textShadow: '0 1px 2px rgba(0, 0, 0, 0.5)'
+                  }}
+                >
+                  ⚡ Find Correlations!
+                </button>
                 {!isSoloMode && (
                   <Link
                     href={`/results/${quadId}/analysis${groupCode ? `?group=${groupCode}` : ''}`}
                     className="px-6 py-3 bg-amber-secondary texture-brushed text-black rounded-none font-bold uppercase tracking-wider hover:scale-105 transition-all text-center"
+                    style={{
+                      boxShadow: 'inset 0 1px 2px rgba(255, 152, 0, 0.2), inset 0 -1px 2px rgba(0, 0, 0, 0.3), 0 4px 8px rgba(0, 0, 0, 0.3)',
+                      textShadow: '0 1px 2px rgba(0, 0, 0, 0.5)'
+                    }}
                   >
                     View Analysis
                   </Link>
