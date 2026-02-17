@@ -32,6 +32,7 @@ export default function AdminPage() {
     submitted_by: ''
   });
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     loadQuestions();
@@ -100,6 +101,43 @@ export default function AdminPage() {
     }
   };
 
+  const handleBulkDelete = async () => {
+    if (selectedIds.size === 0) return;
+
+    if (!confirm(`Are you sure you want to delete ${selectedIds.size} question(s)?`)) return;
+
+    const { error } = await supabase
+      .from('question_bank')
+      .delete()
+      .in('id', Array.from(selectedIds));
+
+    if (error) {
+      console.error('Error deleting questions:', error);
+      alert('Failed to delete questions');
+    } else {
+      setSelectedIds(new Set());
+      loadQuestions();
+    }
+  };
+
+  const toggleSelect = (id: string) => {
+    const newSelected = new Set(selectedIds);
+    if (newSelected.has(id)) {
+      newSelected.delete(id);
+    } else {
+      newSelected.add(id);
+    }
+    setSelectedIds(newSelected);
+  };
+
+  const toggleSelectAll = () => {
+    if (selectedIds.size === filteredQuestions.length) {
+      setSelectedIds(new Set());
+    } else {
+      setSelectedIds(new Set(filteredQuestions.map(q => q.id)));
+    }
+  };
+
   const handleAdd = async () => {
     if (!addForm.prompt || !addForm.label_left || !addForm.label_right) {
       alert('Please fill in all required fields');
@@ -162,16 +200,30 @@ export default function AdminPage() {
               Manage all questions in the suggestion bank
             </p>
           </div>
-          <button
-            onClick={() => setShowAddForm(true)}
-            className="px-6 py-3 bg-burnt-orange texture-brushed text-black rounded-none font-bold uppercase text-sm tracking-wider hover:scale-105 transition-all"
-            style={{
-              boxShadow: 'inset 0 1px 2px rgba(255, 111, 60, 0.2), inset 0 -1px 2px rgba(0, 0, 0, 0.3), 0 4px 8px rgba(0, 0, 0, 0.3)',
-              textShadow: '0 1px 2px rgba(0, 0, 0, 0.5)'
-            }}
-          >
-            + Add New Question
-          </button>
+          <div className="flex gap-3">
+            {selectedIds.size > 0 && (
+              <button
+                onClick={handleBulkDelete}
+                className="px-6 py-3 bg-amber-secondary texture-brushed text-black rounded-none font-bold uppercase text-sm tracking-wider hover:scale-105 transition-all"
+                style={{
+                  boxShadow: 'inset 0 1px 2px rgba(255, 152, 0, 0.2), inset 0 -1px 2px rgba(0, 0, 0, 0.3), 0 4px 8px rgba(0, 0, 0, 0.3)',
+                  textShadow: '0 1px 2px rgba(0, 0, 0, 0.5)'
+                }}
+              >
+                Delete Selected ({selectedIds.size})
+              </button>
+            )}
+            <button
+              onClick={() => setShowAddForm(true)}
+              className="px-6 py-3 bg-burnt-orange texture-brushed text-black rounded-none font-bold uppercase text-sm tracking-wider hover:scale-105 transition-all"
+              style={{
+                boxShadow: 'inset 0 1px 2px rgba(255, 111, 60, 0.2), inset 0 -1px 2px rgba(0, 0, 0, 0.3), 0 4px 8px rgba(0, 0, 0, 0.3)',
+                textShadow: '0 1px 2px rgba(0, 0, 0, 0.5)'
+              }}
+            >
+              + Add New Question
+            </button>
+          </div>
         </div>
 
         {/* Search Bar */}
@@ -185,16 +237,33 @@ export default function AdminPage() {
           />
         </div>
 
-        {/* Stats */}
-        <div className="mb-8 flex gap-4">
-          <div className="px-6 py-3 bg-bg-warm-2 border-2 border-rust-primary/30 rounded-none texture-concrete">
-            <div className="text-2xl font-black text-rust-primary">{questions.length}</div>
-            <div className="text-xs text-[#7a7a9e] uppercase tracking-wider">Total Questions</div>
+        {/* Stats and Select All */}
+        <div className="mb-8 flex items-center justify-between">
+          <div className="flex gap-4">
+            <div className="px-6 py-3 bg-bg-warm-2 border-2 border-rust-primary/30 rounded-none texture-concrete">
+              <div className="text-2xl font-black text-rust-primary">{questions.length}</div>
+              <div className="text-xs text-[#7a7a9e] uppercase tracking-wider">Total Questions</div>
+            </div>
+            <div className="px-6 py-3 bg-bg-warm-2 border-2 border-rust-primary/30 rounded-none texture-concrete">
+              <div className="text-2xl font-black text-amber-secondary">{filteredQuestions.length}</div>
+              <div className="text-xs text-[#7a7a9e] uppercase tracking-wider">Filtered Results</div>
+            </div>
+            {selectedIds.size > 0 && (
+              <div className="px-6 py-3 bg-bg-warm-2 border-2 border-burnt-orange/50 rounded-none texture-concrete">
+                <div className="text-2xl font-black text-burnt-orange">{selectedIds.size}</div>
+                <div className="text-xs text-[#7a7a9e] uppercase tracking-wider">Selected</div>
+              </div>
+            )}
           </div>
-          <div className="px-6 py-3 bg-bg-warm-2 border-2 border-rust-primary/30 rounded-none texture-concrete">
-            <div className="text-2xl font-black text-amber-secondary">{filteredQuestions.length}</div>
-            <div className="text-xs text-[#7a7a9e] uppercase tracking-wider">Filtered Results</div>
-          </div>
+
+          {filteredQuestions.length > 0 && (
+            <button
+              onClick={toggleSelectAll}
+              className="px-6 py-3 border-2 border-rust-primary text-rust-primary rounded-none font-bold uppercase text-xs tracking-wider hover:bg-rust-primary hover:text-black transition-all"
+            >
+              {selectedIds.size === filteredQuestions.length ? 'Deselect All' : 'Select All'}
+            </button>
+          )}
         </div>
 
         {/* Add Form Modal */}
@@ -364,18 +433,27 @@ export default function AdminPage() {
                   // View Mode
                   <div>
                     <div className="flex items-start justify-between mb-4">
-                      <div className="flex-1">
-                        <h3 className="text-xl font-bold text-white mb-2">
-                          {question.prompt}
-                        </h3>
-                        <div className="flex gap-6 text-sm">
-                          <div>
-                            <span className="text-[#7a7a9e] uppercase tracking-wider text-xs">Left (1-5): </span>
-                            <span className="text-rust-primary font-bold">{question.label_left}</span>
-                          </div>
-                          <div>
-                            <span className="text-[#7a7a9e] uppercase tracking-wider text-xs">Right (6-10): </span>
-                            <span className="text-amber-secondary font-bold">{question.label_right}</span>
+                      <div className="flex items-start gap-4 flex-1">
+                        {/* Checkbox */}
+                        <input
+                          type="checkbox"
+                          checked={selectedIds.has(question.id)}
+                          onChange={() => toggleSelect(question.id)}
+                          className="mt-1 w-5 h-5 text-rust-primary bg-bg-warm-1 border-2 border-rust-primary/30 rounded-none cursor-pointer"
+                        />
+                        <div className="flex-1">
+                          <h3 className="text-xl font-bold text-white mb-2">
+                            {question.prompt}
+                          </h3>
+                          <div className="flex gap-6 text-sm">
+                            <div>
+                              <span className="text-[#7a7a9e] uppercase tracking-wider text-xs">Left (1-5): </span>
+                              <span className="text-rust-primary font-bold">{question.label_left}</span>
+                            </div>
+                            <div>
+                              <span className="text-[#7a7a9e] uppercase tracking-wider text-xs">Right (6-10): </span>
+                              <span className="text-amber-secondary font-bold">{question.label_right}</span>
+                            </div>
                           </div>
                         </div>
                       </div>
