@@ -165,7 +165,7 @@ export async function submitResponses(
     player_id: playerId,
     question_id: r.questionId,
     quad_id: quadId,
-    value: r.value
+    value: Math.round(r.value) // Round decimal values to integers for database
   }));
 
   const { error } = await supabase
