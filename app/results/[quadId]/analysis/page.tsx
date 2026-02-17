@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { use, useState, useEffect } from 'react';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
 import { Avatar } from '@/components/Avatar';
@@ -13,7 +13,8 @@ import {
   findWildcard
 } from '@/lib/analytics';
 
-export default function AnalysisPage({ params }: { params: { quadId: string } }) {
+export default function AnalysisPage({ params }: { params: Promise<{ quadId: string }> }) {
+  const { quadId } = use(params);
   const [quad, setQuad] = useState<Quad | null>(null);
   const [players, setPlayers] = useState<Player[]>([]);
   const [responsesByPlayer, setResponsesByPlayer] = useState<Map<string, Response[]>>(new Map());
@@ -30,7 +31,7 @@ export default function AnalysisPage({ params }: { params: { quadId: string } })
       const { data: quadData } = await supabase
         .from('quads')
         .select('*')
-        .eq('id', params.quadId)
+        .eq('id', quadId)
         .single();
 
       if (quadData) {
@@ -41,7 +42,7 @@ export default function AnalysisPage({ params }: { params: { quadId: string } })
       const { data: responsesData } = await supabase
         .from('responses')
         .select('*')
-        .eq('quad_id', params.quadId);
+        .eq('quad_id', quadId);
 
       if (responsesData) {
         const playerIds = [...new Set(responsesData.map(r => r.player_id))];
@@ -68,7 +69,7 @@ export default function AnalysisPage({ params }: { params: { quadId: string } })
     };
 
     loadData();
-  }, [params.quadId]);
+  }, [quadId]);
 
   if (loading) {
     return (
@@ -85,7 +86,7 @@ export default function AnalysisPage({ params }: { params: { quadId: string } })
           <h1 className="text-4xl font-black text-white uppercase tracking-wider mb-4">Not Enough Data</h1>
           <p className="text-[#b8b8d1] mb-8">At least 2 players need to complete the quad for analysis.</p>
           <Link
-            href={`/results/${params.quadId}${groupCode ? `?group=${groupCode}` : ''}`}
+            href={`/results/${quadId}${groupCode ? `?group=${groupCode}` : ''}`}
             className="inline-block px-6 py-3 bg-rust-primary texture-brushed text-black rounded-none font-bold uppercase tracking-wider hover:scale-105 transition-all"
             style={{
               boxShadow: 'inset 0 1px 2px rgba(255, 147, 65, 0.2), inset 0 -1px 2px rgba(0, 0, 0, 0.3), 0 4px 8px rgba(0, 0, 0, 0.3)',
@@ -110,7 +111,7 @@ export default function AnalysisPage({ params }: { params: { quadId: string } })
       <div className="container mx-auto px-4 max-w-6xl relative z-10">
         <div className="mb-8">
           <Link
-            href={`/results/${params.quadId}${groupCode ? `?group=${groupCode}` : ''}`}
+            href={`/results/${quadId}${groupCode ? `?group=${groupCode}` : ''}`}
             className="text-rust-primary hover:text-amber-secondary flex items-center gap-2 transition-colors"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
