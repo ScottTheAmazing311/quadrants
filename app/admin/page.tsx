@@ -10,6 +10,7 @@ interface QuestionSuggestion {
   label_left: string;
   label_right: string;
   submitted_by: string | null;
+  times_used: number;
   created_at: string;
 }
 
@@ -39,7 +40,7 @@ export default function AdminPage() {
   const loadQuestions = async () => {
     setLoading(true);
     const { data, error } = await supabase
-      .from('question_suggestions')
+      .from('question_bank')
       .select('*')
       .order('created_at', { ascending: false });
 
@@ -65,7 +66,7 @@ export default function AdminPage() {
     if (!editingId) return;
 
     const { error } = await supabase
-      .from('question_suggestions')
+      .from('question_bank')
       .update({
         prompt: editForm.prompt,
         label_left: editForm.label_left,
@@ -87,7 +88,7 @@ export default function AdminPage() {
     if (!confirm('Are you sure you want to delete this question?')) return;
 
     const { error } = await supabase
-      .from('question_suggestions')
+      .from('question_bank')
       .delete()
       .eq('id', id);
 
@@ -106,7 +107,7 @@ export default function AdminPage() {
     }
 
     const { error } = await supabase
-      .from('question_suggestions')
+      .from('question_bank')
       .insert({
         prompt: addForm.prompt,
         label_left: addForm.label_left,
@@ -400,6 +401,10 @@ export default function AdminPage() {
                           <span className="text-white">{question.submitted_by}</span>
                         </div>
                       )}
+                      <div>
+                        <span className="uppercase tracking-wider">Times Used: </span>
+                        <span className="text-burnt-orange font-bold">{question.times_used || 0}</span>
+                      </div>
                       <div>
                         <span className="uppercase tracking-wider">Added: </span>
                         <span className="text-white">{new Date(question.created_at).toLocaleDateString()}</span>
