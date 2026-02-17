@@ -290,9 +290,19 @@ export default function ResultsPage({ params }: { params: Promise<{ quadId: stri
                     <svg className="w-6 h-6 text-burnt-orange flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                     </svg>
-                    <div>
+                    <div className="flex-1">
                       <h3 className="text-burnt-orange font-black uppercase tracking-wider text-sm mb-2">Correlation Found!</h3>
-                      <p className="text-white font-bold">{correlationMessage}</p>
+                      <p className="text-white font-bold mb-4">{correlationMessage}</p>
+                      <button
+                        onClick={findInterestingCorrelation}
+                        className="px-4 py-2 bg-burnt-orange texture-brushed text-black rounded-none font-bold uppercase text-xs tracking-wider hover:scale-105 transition-all"
+                        style={{
+                          boxShadow: 'inset 0 1px 2px rgba(255, 111, 60, 0.2), inset 0 -1px 2px rgba(0, 0, 0, 0.3), 0 2px 4px rgba(0, 0, 0, 0.3)',
+                          textShadow: '0 1px 2px rgba(0, 0, 0, 0.5)'
+                        }}
+                      >
+                        Find another!
+                      </button>
                     </div>
                     <button
                       onClick={() => {
@@ -300,7 +310,7 @@ export default function ResultsPage({ params }: { params: Promise<{ quadId: stri
                         setShowingCorrelation(false);
                         setCurrentCorrelationPair(null);
                       }}
-                      className="ml-auto text-burnt-orange hover:text-amber-secondary transition-colors"
+                      className="text-burnt-orange hover:text-amber-secondary transition-colors flex-shrink-0"
                     >
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
