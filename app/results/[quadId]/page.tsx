@@ -113,20 +113,20 @@ export default function ResultsPage({ params }: { params: Promise<{ quadId: stri
 
   if (loading) {
     return (
-      <div className="min-h-screen retro-grid relative flex items-center justify-center">
-        <div className="scanlines" />
-        <div className="text-xl text-[#00f0ff] neon-text-cyan relative z-10">Loading results...</div>
+      <div className="min-h-screen industrial-base relative flex items-center justify-center">
+        <div className="\!-- scanlines removed --" />
+        <div className="text-xl text-rust-primary  relative z-10">Loading results...</div>
       </div>
     );
   }
 
   if (!quad || questions.length === 0) {
     return (
-      <div className="min-h-screen retro-grid relative flex items-center justify-center">
-        <div className="scanlines" />
+      <div className="min-h-screen industrial-base relative flex items-center justify-center">
+        <div className="\!-- scanlines removed --" />
         <div className="text-center premium-card p-12 rounded-none max-w-lg relative z-10">
           <h1 className="text-4xl font-black text-white uppercase mb-4">Results Not Available</h1>
-          <Link href="/" className="text-[#00f0ff] hover:text-[#ff00aa] transition-colors">
+          <Link href="/" className="text-rust-primary hover:text-amber-secondary transition-colors">
             Back to Home
           </Link>
         </div>
@@ -135,13 +135,13 @@ export default function ResultsPage({ params }: { params: Promise<{ quadId: stri
   }
 
   return (
-    <div className="min-h-screen retro-grid relative py-16">
-      <div className="scanlines" />
+    <div className="min-h-screen industrial-base relative py-16">
+      <div className="\!-- scanlines removed --" />
       <div className="container mx-auto px-4 max-w-6xl relative z-10">
         <div className="mb-8">
           <Link
             href={groupCode ? `/group/${groupCode}` : '/'}
-            className="text-[#00f0ff] hover:text-[#ff00aa] flex items-center gap-2 transition-colors"
+            className="text-rust-primary hover:text-amber-secondary flex items-center gap-2 transition-colors"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -154,7 +154,7 @@ export default function ResultsPage({ params }: { params: Promise<{ quadId: stri
           <h1 className="text-4xl md:text-5xl font-black text-white uppercase mb-2 tracking-wider">
             {quad.name}
           </h1>
-          <div className="h-1 w-32 bg-gradient-to-r from-[#00f0ff] to-[#ff00aa] mb-4"></div>
+          <div className="h-1 w-32 bg-rust-primary texture-brushed mb-4"></div>
           <p className="text-[#b8b8d1] mb-8">
             {isSoloMode ? 'Solo Mode' : `${players.length} ${players.length === 1 ? 'player' : 'players'} responded`}
           </p>
@@ -165,7 +165,7 @@ export default function ResultsPage({ params }: { params: Promise<{ quadId: stri
               <p>Be the first to play this quad.</p>
               <Link
                 href={`/play/${quadId}${groupCode ? `?group=${groupCode}` : ''}`}
-                className="inline-block mt-4 px-6 py-3 bg-gradient-to-r from-[#00f0ff] to-[#ff00aa] text-black rounded-none font-bold uppercase tracking-wider hover:scale-105 transition-all"
+                className="inline-block mt-4 px-6 py-3 bg-rust-primary texture-brushed text-black rounded-none font-bold uppercase tracking-wider hover:scale-105 transition-all"
               >
                 Play Now
               </Link>
@@ -191,21 +191,21 @@ export default function ResultsPage({ params }: { params: Promise<{ quadId: stri
                 {!isSoloMode && (
                   <Link
                     href={`/results/${quadId}/analysis${groupCode ? `?group=${groupCode}` : ''}`}
-                    className="px-6 py-3 bg-gradient-to-r from-[#ff00aa] to-[#00f0ff] text-black rounded-none font-bold uppercase tracking-wider hover:scale-105 transition-all text-center"
+                    className="px-6 py-3 bg-amber-secondary texture-brushed text-black rounded-none font-bold uppercase tracking-wider hover:scale-105 transition-all text-center"
                   >
                     View Analysis
                   </Link>
                 )}
                 <Link
                   href={`/play/${quadId}${groupCode ? `?group=${groupCode}` : ''}`}
-                  className="px-6 py-3 border-2 border-[#00f0ff] text-[#00f0ff] rounded-none font-bold uppercase tracking-wider hover:bg-[#00f0ff] hover:text-black transition-all text-center"
+                  className="px-6 py-3 border-2 border-rust-primary text-rust-primary rounded-none font-bold uppercase tracking-wider hover:bg-[#00f0ff] hover:text-black transition-all text-center"
                 >
                   Retake Quiz
                 </Link>
                 {isSoloMode && (
                   <Link
                     href="/group"
-                    className="px-6 py-3 border-2 border-[#39ff14] text-[#39ff14] rounded-none font-bold uppercase tracking-wider hover:bg-[#39ff14] hover:text-black transition-all text-center"
+                    className="px-6 py-3 border-2 border-burnt-orange text-burnt-orange rounded-none font-bold uppercase tracking-wider hover:bg-[#39ff14] hover:text-black transition-all text-center"
                   >
                     Create Group & Invite Friends
                   </Link>

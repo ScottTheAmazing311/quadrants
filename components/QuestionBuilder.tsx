@@ -41,14 +41,14 @@ export function QuestionBuilder({ questions, onChange }: QuestionBuilderProps) {
   return (
     <div className="space-y-4">
       {questions.map((question, index) => (
-        <div key={index} className="bg-[#1a1b2e] border-2 border-[#00f0ff]/30 rounded-none p-4 space-y-3">
+        <div key={index} className="bg-bg-warm-2 border-2 border-rust-primary/30 rounded-none p-4 space-y-3 texture-concrete">
           <div className="flex items-center justify-between">
-            <span className="font-bold text-[#00f0ff] uppercase text-sm tracking-wider">Question {index + 1}</span>
+            <span className="font-bold text-rust-primary uppercase text-sm tracking-wider">Question {index + 1}</span>
             <div className="flex items-center gap-2">
               <button
                 type="button"
                 onClick={() => updateQuestion(index, 'locked', !question.locked)}
-                className={`p-1 rounded-none transition-colors ${question.locked ? 'text-[#ffed00]' : 'text-[#7a7a9e]'}`}
+                className={`p-1 rounded-none transition-colors ${question.locked ? 'text-burnt-orange' : 'text-[#7a7a9e]'}`}
                 title={question.locked ? 'Unlock' : 'Lock'}
               >
                 <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
@@ -63,7 +63,7 @@ export function QuestionBuilder({ questions, onChange }: QuestionBuilderProps) {
                 type="button"
                 onClick={() => moveQuestion(index, 'up')}
                 disabled={index === 0}
-                className="p-1 text-[#00f0ff] disabled:text-[#2a2b3e] transition-colors"
+                className="p-1 text-rust-primary disabled:text-bg-warm-3 transition-colors"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
@@ -73,7 +73,7 @@ export function QuestionBuilder({ questions, onChange }: QuestionBuilderProps) {
                 type="button"
                 onClick={() => moveQuestion(index, 'down')}
                 disabled={index === questions.length - 1}
-                className="p-1 text-[#00f0ff] disabled:text-[#2a2b3e] transition-colors"
+                className="p-1 text-rust-primary disabled:text-bg-warm-3 transition-colors"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -82,7 +82,7 @@ export function QuestionBuilder({ questions, onChange }: QuestionBuilderProps) {
               <button
                 type="button"
                 onClick={() => removeQuestion(index)}
-                className="p-1 text-[#ff00aa] hover:text-red-500 transition-colors"
+                className="p-1 text-amber-secondary hover:text-burnt-orange transition-colors"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -96,7 +96,7 @@ export function QuestionBuilder({ questions, onChange }: QuestionBuilderProps) {
             <textarea
               value={question.prompt}
               onChange={(e) => updateQuestion(index, 'prompt', e.target.value)}
-              className="w-full px-3 py-2 bg-[#0a0b1a] border-2 border-[#00f0ff]/20 text-white rounded-none focus:border-[#00f0ff] focus:outline-none transition-colors resize-none"
+              className="w-full px-3 py-2 bg-bg-warm-1 border-2 border-rust-primary/20 text-white rounded-none focus:border-rust-primary focus:outline-none transition-colors resize-none"
               rows={2}
               placeholder="e.g., How do you prefer to spend your weekend?"
             />
@@ -109,7 +109,7 @@ export function QuestionBuilder({ questions, onChange }: QuestionBuilderProps) {
                 type="text"
                 value={question.label_left}
                 onChange={(e) => updateQuestion(index, 'label_left', e.target.value)}
-                className="w-full px-3 py-2 bg-[#0a0b1a] border-2 border-[#00f0ff]/20 text-white rounded-none focus:border-[#00f0ff] focus:outline-none transition-colors"
+                className="w-full px-3 py-2 bg-bg-warm-1 border-2 border-rust-primary/20 text-white rounded-none focus:border-rust-primary focus:outline-none transition-colors"
                 placeholder="e.g., Out with friends"
               />
             </div>
@@ -119,7 +119,7 @@ export function QuestionBuilder({ questions, onChange }: QuestionBuilderProps) {
                 type="text"
                 value={question.label_right}
                 onChange={(e) => updateQuestion(index, 'label_right', e.target.value)}
-                className="w-full px-3 py-2 bg-[#0a0b1a] border-2 border-[#ff00aa]/20 text-white rounded-none focus:border-[#ff00aa] focus:outline-none transition-colors"
+                className="w-full px-3 py-2 bg-bg-warm-1 border-2 border-amber-secondary/20 text-white rounded-none focus:border-amber-secondary focus:outline-none transition-colors"
                 placeholder="e.g., Alone at home"
               />
             </div>
@@ -130,7 +130,7 @@ export function QuestionBuilder({ questions, onChange }: QuestionBuilderProps) {
       <button
         type="button"
         onClick={addQuestion}
-        className="w-full py-3 border-2 border-dashed border-[#00f0ff]/50 rounded-none text-[#00f0ff] hover:border-[#00f0ff] hover:bg-[#00f0ff]/10 transition-all font-bold uppercase tracking-wider"
+        className="w-full py-3 border-2 border-dashed border-rust-primary/50 rounded-none text-rust-primary hover:border-rust-primary hover:bg-rust-primary/10 transition-all font-bold uppercase tracking-wider"
       >
         + Add Question
       </button>

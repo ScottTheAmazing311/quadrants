@@ -82,13 +82,12 @@ export default function GroupPage() {
   };
 
   return (
-    <div className="min-h-screen retro-grid relative py-16">
-      <div className="scanlines" />
+    <div className="min-h-screen industrial-base relative py-16">
       <div className="container mx-auto px-4 max-w-3xl relative z-10">
         <div className="mb-8">
           <Link
             href="/"
-            className="text-[#00f0ff] hover:text-[#ff00aa] flex items-center gap-2 transition-colors"
+            className="text-rust-primary hover:text-amber-secondary flex items-center gap-2 transition-colors"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -99,14 +98,18 @@ export default function GroupPage() {
 
         <div className="premium-card rounded-none overflow-hidden">
           {/* Tabs */}
-          <div className="flex border-b-2 border-[#00f0ff]/30">
+          <div className="flex border-b-2 border-rust-primary/30">
             <button
               onClick={() => setTab('create')}
               className={`flex-1 py-4 px-6 font-bold uppercase tracking-wider transition-all ${
                 tab === 'create'
-                  ? 'bg-gradient-to-r from-[#ff00aa] to-[#00f0ff] text-black'
-                  : 'bg-[#1a1b2e] text-[#7a7a9e] hover:text-[#00f0ff]'
+                  ? 'bg-rust-primary texture-brushed text-black'
+                  : 'bg-bg-warm-2 text-[#7a7a9e] hover:text-rust-primary'
               }`}
+              style={tab === 'create' ? {
+                boxShadow: 'inset 0 1px 2px rgba(255, 147, 65, 0.2), inset 0 -1px 2px rgba(0, 0, 0, 0.3)',
+                textShadow: '0 1px 2px rgba(0, 0, 0, 0.5)'
+              } : {}}
             >
               Create Group
             </button>
@@ -114,9 +117,13 @@ export default function GroupPage() {
               onClick={() => setTab('join')}
               className={`flex-1 py-4 px-6 font-bold uppercase tracking-wider transition-all ${
                 tab === 'join'
-                  ? 'bg-gradient-to-r from-[#00f0ff] to-[#ff00aa] text-black'
-                  : 'bg-[#1a1b2e] text-[#7a7a9e] hover:text-[#00f0ff]'
+                  ? 'bg-amber-secondary texture-brushed text-black'
+                  : 'bg-bg-warm-2 text-[#7a7a9e] hover:text-rust-primary'
               }`}
+              style={tab === 'join' ? {
+                boxShadow: 'inset 0 1px 2px rgba(255, 152, 0, 0.2), inset 0 -1px 2px rgba(0, 0, 0, 0.3)',
+                textShadow: '0 1px 2px rgba(0, 0, 0, 0.5)'
+              } : {}}
             >
               Join Group
             </button>
@@ -135,7 +142,7 @@ export default function GroupPage() {
                   <h2 className="text-2xl font-black text-white uppercase mb-2 tracking-wider">
                     Create a New Group
                   </h2>
-                  <div className="h-1 w-24 bg-gradient-to-r from-[#ff00aa] to-[#00f0ff] mb-4"></div>
+                  <div className="h-1 w-24 bg-rust-primary mb-4"></div>
                   <p className="text-[#b8b8d1]">
                     Create a group and add all members upfront
                   </p>
@@ -150,7 +157,7 @@ export default function GroupPage() {
                     value={groupName}
                     onChange={(e) => setGroupName(e.target.value)}
                     required
-                    className="w-full px-4 py-3 bg-[#1a1b2e] border-2 border-[#ff00aa]/30 text-white rounded-none focus:border-[#ff00aa] focus:outline-none transition-colors"
+                    className="w-full px-4 py-3 bg-bg-warm-2 border-2 border-rust-primary/30 text-white rounded-none focus:border-rust-primary focus:outline-none transition-colors"
                     placeholder="e.g., THE SQUAD"
                   />
                 </div>
@@ -163,7 +170,7 @@ export default function GroupPage() {
                     <button
                       type="button"
                       onClick={addMember}
-                      className="px-4 py-2 border-2 border-[#39ff14] text-[#39ff14] rounded-none font-bold uppercase text-xs tracking-wider hover:bg-[#39ff14] hover:text-black transition-all"
+                      className="px-4 py-2 border-2 border-burnt-orange text-burnt-orange rounded-none font-bold uppercase text-xs tracking-wider hover:bg-burnt-orange hover:text-black transition-all"
                     >
                       + Add Member
                     </button>
@@ -171,14 +178,14 @@ export default function GroupPage() {
 
                   <div className="space-y-4">
                     {members.map((member, index) => (
-                      <div key={index} className="bg-[#1a1b2e] border-2 border-[#00f0ff]/30 rounded-none p-4">
+                      <div key={index} className="bg-bg-warm-2 border-2 border-rust-primary/30 rounded-none p-4 texture-concrete">
                         <div className="flex items-start justify-between mb-3">
-                          <span className="text-[#00f0ff] font-bold uppercase text-sm">Member {index + 1}</span>
+                          <span className="text-rust-primary font-bold uppercase text-sm">Member {index + 1}</span>
                           {members.length > 1 && (
                             <button
                               type="button"
                               onClick={() => removeMember(index)}
-                              className="text-[#ff00aa] hover:text-red-500 transition-colors"
+                              className="text-amber-secondary hover:text-burnt-orange transition-colors"
                             >
                               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -190,7 +197,7 @@ export default function GroupPage() {
                           type="text"
                           value={member.name}
                           onChange={(e) => updateMemberName(index, e.target.value)}
-                          className="w-full px-4 py-3 mb-3 bg-[#0a0b1a] border-2 border-[#00f0ff]/20 text-white rounded-none focus:border-[#00f0ff] focus:outline-none transition-colors"
+                          className="w-full px-4 py-3 mb-3 bg-bg-warm-1 border-2 border-rust-primary/20 text-white rounded-none focus:border-rust-primary focus:outline-none transition-colors"
                           placeholder="Member name"
                         />
                         <AvatarUpload onUpload={(url) => updateMemberAvatar(index, url)} />
@@ -202,7 +209,11 @@ export default function GroupPage() {
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="w-full py-4 bg-gradient-to-r from-[#ff00aa] to-[#00f0ff] text-black rounded-none font-black uppercase tracking-wider hover:scale-105 transition-all disabled:opacity-50 text-lg"
+                  className="w-full py-4 bg-rust-primary texture-brushed text-black rounded-none font-black uppercase tracking-wider hover:scale-105 transition-all disabled:opacity-50 text-lg"
+                  style={{
+                    boxShadow: 'inset 0 1px 2px rgba(255, 147, 65, 0.2), inset 0 -1px 2px rgba(0, 0, 0, 0.3), 0 4px 8px rgba(0, 0, 0, 0.3)',
+                    textShadow: '0 1px 2px rgba(0, 0, 0, 0.5)'
+                  }}
                 >
                   {submitting ? 'Creating...' : 'Create Group'}
                 </button>
@@ -211,30 +222,30 @@ export default function GroupPage() {
 
             {tab === 'create' && createdCode && (
               <div className="text-center space-y-6">
-                <div className="inline-block p-8 bg-green-900/20 border-2 border-[#39ff14] rounded-none">
-                  <p className="text-[#39ff14] font-bold uppercase mb-3 tracking-wider text-lg">Group Created!</p>
-                  <p className="text-5xl font-black text-[#39ff14] tracking-wider mb-3 font-mono neon-text-green">
+                <div className="inline-block p-8 bg-green-900/20 border-3 border-burnt-orange rounded-none texture-concrete">
+                  <p className="text-burnt-orange font-bold uppercase mb-3 tracking-wider text-lg">Group Created!</p>
+                  <p className="text-5xl font-black text-burnt-orange tracking-wider mb-3 font-mono">
                     {createdCode}
                   </p>
-                  <p className="text-sm text-[#39ff14]/80 uppercase tracking-wider">Share this code with your group</p>
-                  <p className="text-xs text-[#39ff14]/60 mt-2">Members will select their name when they join</p>
+                  <p className="text-sm text-amber-secondary/80 uppercase tracking-wider">Share this code with your group</p>
+                  <p className="text-xs text-[#7a7a9e] mt-2">Members will select their name when they join</p>
                 </div>
 
                 {/* Shareable Link */}
-                <div className="bg-[#1a1b2e] border-2 border-[#00f0ff]/30 rounded-none p-4">
+                <div className="bg-bg-warm-2 border-2 border-rust-primary/30 rounded-none p-4 texture-concrete">
                   <p className="text-xs text-[#7a7a9e] uppercase tracking-wider mb-2">Or Share This Link</p>
                   <div className="flex items-center gap-2">
                     <input
                       type="text"
                       readOnly
                       value={`${window.location.origin}/group/${createdCode}`}
-                      className="flex-1 px-4 py-2 bg-[#0a0b1a] border border-[#00f0ff]/20 text-[#00f0ff] rounded-none font-mono text-sm"
+                      className="flex-1 px-4 py-2 bg-bg-warm-1 border border-rust-primary/20 text-rust-primary rounded-none font-mono text-sm"
                     />
                     <button
                       onClick={() => {
                         navigator.clipboard.writeText(`${window.location.origin}/group/${createdCode}`);
                       }}
-                      className="px-4 py-2 border-2 border-[#00f0ff] text-[#00f0ff] rounded-none font-bold uppercase text-xs tracking-wider hover:bg-[#00f0ff] hover:text-black transition-all whitespace-nowrap"
+                      className="px-4 py-2 border-2 border-rust-primary text-rust-primary rounded-none font-bold uppercase text-xs tracking-wider hover:bg-rust-primary hover:text-black transition-all whitespace-nowrap"
                     >
                       Copy Link
                     </button>
@@ -246,13 +257,17 @@ export default function GroupPage() {
                     onClick={() => {
                       navigator.clipboard.writeText(createdCode);
                     }}
-                    className="flex-1 px-6 py-3 border-2 border-[#39ff14] text-[#39ff14] rounded-none font-bold uppercase tracking-wider hover:bg-[#39ff14] hover:text-black transition-all"
+                    className="flex-1 px-6 py-3 border-2 border-burnt-orange text-burnt-orange rounded-none font-bold uppercase tracking-wider hover:bg-burnt-orange hover:text-black transition-all"
                   >
                     Copy Code
                   </button>
                   <Link
                     href={`/group/${createdCode}`}
-                    className="flex-1 px-6 py-3 bg-gradient-to-r from-[#00f0ff] to-[#ff00aa] text-black rounded-none font-bold uppercase tracking-wider hover:scale-105 transition-all text-center"
+                    className="flex-1 px-6 py-3 bg-rust-primary texture-brushed text-black rounded-none font-bold uppercase tracking-wider hover:scale-105 transition-all text-center"
+                    style={{
+                      boxShadow: 'inset 0 1px 2px rgba(255, 147, 65, 0.2), inset 0 -1px 2px rgba(0, 0, 0, 0.3), 0 4px 8px rgba(0, 0, 0, 0.3)',
+                      textShadow: '0 1px 2px rgba(0, 0, 0, 0.5)'
+                    }}
                   >
                     View Group
                   </Link>
@@ -266,7 +281,7 @@ export default function GroupPage() {
                   <h2 className="text-2xl font-black text-white uppercase mb-2 tracking-wider">
                     Join a Group
                   </h2>
-                  <div className="h-1 w-24 bg-gradient-to-r from-[#00f0ff] to-[#ff00aa] mb-4"></div>
+                  <div className="h-1 w-24 bg-amber-secondary mb-4"></div>
                   <p className="text-[#b8b8d1]">
                     Enter the 6-character code, then select your name
                   </p>
@@ -282,7 +297,7 @@ export default function GroupPage() {
                     onChange={(e) => setJoinCode(e.target.value.toUpperCase())}
                     required
                     maxLength={6}
-                    className="w-full px-4 py-3 bg-[#1a1b2e] border-2 border-[#00f0ff]/30 text-white rounded-none focus:border-[#00f0ff] focus:outline-none transition-colors uppercase text-center text-2xl font-mono font-bold tracking-wider neon-text-cyan"
+                    className="w-full px-4 py-3 bg-bg-warm-2 border-2 border-amber-secondary/30 text-white rounded-none focus:border-amber-secondary focus:outline-none transition-colors uppercase text-center text-2xl font-mono font-bold tracking-wider"
                     placeholder="ABC123"
                   />
                 </div>
@@ -290,7 +305,11 @@ export default function GroupPage() {
                 <button
                   type="submit"
                   disabled={joinCode.length !== 6}
-                  className="w-full py-4 bg-gradient-to-r from-[#00f0ff] to-[#ff00aa] text-black rounded-none font-black uppercase tracking-wider hover:scale-105 transition-all disabled:opacity-50 text-lg"
+                  className="w-full py-4 bg-amber-secondary texture-brushed text-black rounded-none font-black uppercase tracking-wider hover:scale-105 transition-all disabled:opacity-50 text-lg"
+                  style={{
+                    boxShadow: 'inset 0 1px 2px rgba(255, 152, 0, 0.2), inset 0 -1px 2px rgba(0, 0, 0, 0.3), 0 4px 8px rgba(0, 0, 0, 0.3)',
+                    textShadow: '0 1px 2px rgba(0, 0, 0, 0.5)'
+                  }}
                 >
                   Continue
                 </button>

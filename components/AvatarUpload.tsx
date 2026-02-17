@@ -53,12 +53,18 @@ export function AvatarUpload({ onUpload }: AvatarUploadProps) {
     <div className="space-y-4">
       <div className="flex items-center gap-4">
         {preview && (
-          <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-[#00f0ff] neon-glow-cyan">
+          <div className="w-20 h-20 rounded-full overflow-hidden border-3 border-rust-primary warm-glow">
             <img src={preview} alt="Preview" className="w-full h-full object-cover" />
           </div>
         )}
 
-        <label className="cursor-pointer bg-gradient-to-r from-[#00f0ff] to-[#ff00aa] text-black px-6 py-3 rounded-none transition-all hover:scale-105 inline-block font-bold uppercase tracking-wider text-sm">
+        <label
+          className="cursor-pointer bg-rust-primary texture-brushed text-black px-6 py-3 rounded-none transition-all hover:scale-105 inline-block font-bold uppercase tracking-wider text-sm"
+          style={{
+            boxShadow: 'inset 0 1px 2px rgba(255, 147, 65, 0.2), inset 0 -1px 2px rgba(0, 0, 0, 0.3), 0 4px 8px rgba(0, 0, 0, 0.3)',
+            textShadow: '0 1px 2px rgba(0, 0, 0, 0.5)'
+          }}
+        >
           {uploading ? 'Uploading...' : preview ? 'Change Avatar' : 'Upload Avatar'}
           <input
             type="file"

@@ -106,13 +106,17 @@ export function MusicPlayer() {
         {/* Control Button */}
         <button
           onClick={() => setShowControls(!showControls)}
-          className="w-14 h-14 bg-gradient-to-br from-[#00f0ff] to-[#ff00aa] rounded-none border-2 border-[#00f0ff] shadow-lg hover:scale-110 transition-all neon-glow-cyan flex items-center justify-center group"
+          className="w-14 h-14 bg-rust-primary texture-diagonal rounded-none border-3 border-rust-primary shadow-lg hover:scale-110 transition-all warm-glow flex items-center justify-center group"
           title="Music Controls"
+          style={{
+            boxShadow: 'inset 0 1px 2px rgba(255, 147, 65, 0.2), inset 0 -1px 2px rgba(0, 0, 0, 0.3), 0 4px 12px rgba(0, 0, 0, 0.4)'
+          }}
         >
-          <svg 
-            className="w-6 h-6 text-black" 
-            fill="currentColor" 
+          <svg
+            className="w-6 h-6 text-black"
+            fill="currentColor"
             viewBox="0 0 24 24"
+            style={{ filter: 'drop-shadow(0 1px 1px rgba(0, 0, 0, 0.5))' }}
           >
             <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z" />
           </svg>
@@ -120,15 +124,15 @@ export function MusicPlayer() {
 
         {/* Expanded Controls */}
         {showControls && (
-          <div className="absolute bottom-16 right-0 premium-card rounded-none p-4 w-64 border-2 border-[#00f0ff] animate-slide-up">
+          <div className="absolute bottom-16 right-0 premium-card rounded-none p-4 w-64 border-embossed animate-slide-up">
             {/* Header */}
-            <div className="flex items-center justify-between mb-4 pb-3 border-b border-[#00f0ff]/30">
+            <div className="flex items-center justify-between mb-4 pb-3 border-b border-rust-primary/30">
               <span className="text-white font-bold uppercase text-sm tracking-wider">
-                Retro Beats
+                Audio Mix
               </span>
               <button
                 onClick={() => setShowControls(false)}
-                className="text-[#7a7a9e] hover:text-[#ff00aa] transition-colors"
+                className="text-[#7a7a9e] hover:text-amber-secondary transition-colors"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -141,9 +145,13 @@ export function MusicPlayer() {
               onClick={togglePlay}
               className={`w-full py-3 mb-4 font-bold uppercase text-sm tracking-wider rounded-none transition-all ${
                 isPlaying
-                  ? 'bg-gradient-to-r from-[#ff00aa] to-[#00f0ff] text-black'
-                  : 'border-2 border-[#00f0ff] text-[#00f0ff] hover:bg-[#00f0ff] hover:text-black'
+                  ? 'bg-rust-primary texture-brushed text-black'
+                  : 'border-3 border-rust-primary text-rust-primary hover:bg-rust-primary hover:text-black'
               }`}
+              style={isPlaying ? {
+                boxShadow: 'inset 0 1px 2px rgba(255, 147, 65, 0.2), inset 0 -1px 2px rgba(0, 0, 0, 0.3)',
+                textShadow: '0 1px 2px rgba(0, 0, 0, 0.5)'
+              } : {}}
             >
               {isPlaying ? (
                 <div className="flex items-center justify-center gap-2">
@@ -168,7 +176,7 @@ export function MusicPlayer() {
                 <label className="text-xs text-[#7a7a9e] uppercase tracking-wider">
                   Volume
                 </label>
-                <span className="text-xs text-[#00f0ff] font-mono">
+                <span className="text-xs text-rust-primary font-mono">
                   {volume}%
                 </span>
               </div>
@@ -184,7 +192,7 @@ export function MusicPlayer() {
             </div>
 
             {/* Now Playing */}
-            <div className="mt-4 pt-3 border-t border-[#00f0ff]/30">
+            <div className="mt-4 pt-3 border-t border-rust-primary/30">
               <div className="text-xs text-[#7a7a9e] uppercase tracking-wider mb-1">
                 Now Playing
               </div>
@@ -221,18 +229,20 @@ export function MusicPlayer() {
           appearance: none;
           width: 12px;
           height: 12px;
-          background: linear-gradient(135deg, #00f0ff, #ff00aa);
+          border-radius: 0;
+          background: #c87341;
           cursor: pointer;
-          box-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+          box-shadow: inset 0 1px 1px rgba(255, 147, 65, 0.2), 0 2px 4px rgba(0, 0, 0, 0.4);
         }
 
         .volume-slider::-moz-range-thumb {
           width: 12px;
           height: 12px;
-          background: linear-gradient(135deg, #00f0ff, #ff00aa);
+          border-radius: 0;
+          background: #c87341;
           border: none;
           cursor: pointer;
-          box-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+          box-shadow: inset 0 1px 1px rgba(255, 147, 65, 0.2), 0 2px 4px rgba(0, 0, 0, 0.4);
         }
       `}</style>
     </>

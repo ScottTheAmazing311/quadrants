@@ -62,21 +62,21 @@ export default function GroupLobbyPage({ params }: { params: Promise<{ code: str
 
   if (loading) {
     return (
-      <div className="min-h-screen retro-grid relative flex items-center justify-center">
-        <div className="scanlines" />
-        <div className="text-xl text-[#00f0ff] neon-text-cyan relative z-10">Loading group...</div>
+      <div className="min-h-screen industrial-base relative flex items-center justify-center">
+        <div className="\!-- scanlines removed --" />
+        <div className="text-xl text-rust-primary  relative z-10">Loading group...</div>
       </div>
     );
   }
 
   if (!group) {
     return (
-      <div className="min-h-screen retro-grid relative flex items-center justify-center">
-        <div className="scanlines" />
+      <div className="min-h-screen industrial-base relative flex items-center justify-center">
+        <div className="\!-- scanlines removed --" />
         <div className="text-center premium-card p-12 rounded-none max-w-lg relative z-10">
           <h1 className="text-4xl font-black text-white uppercase mb-4">Group Not Found</h1>
           <p className="text-[#b8b8d1] mb-6">The code "{code}" doesn't match any group.</p>
-          <Link href="/group" className="text-[#00f0ff] hover:text-[#ff00aa] transition-colors">
+          <Link href="/group" className="text-rust-primary hover:text-amber-secondary transition-colors">
             Back to Join/Create
           </Link>
         </div>
@@ -87,13 +87,13 @@ export default function GroupLobbyPage({ params }: { params: Promise<{ code: str
   // If user hasn't selected their player yet, show selection screen
   if (!currentPlayerId) {
     return (
-      <div className="min-h-screen retro-grid relative py-16">
-        <div className="scanlines" />
+      <div className="min-h-screen industrial-base relative py-16">
+        <div className="\!-- scanlines removed --" />
         <div className="container mx-auto px-4 max-w-2xl relative z-10">
           <div className="mb-8">
             <Link
               href="/group"
-              className="text-[#00f0ff] hover:text-[#ff00aa] flex items-center gap-2 transition-colors"
+              className="text-rust-primary hover:text-amber-secondary flex items-center gap-2 transition-colors"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -106,7 +106,7 @@ export default function GroupLobbyPage({ params }: { params: Promise<{ code: str
             <h1 className="text-4xl md:text-5xl font-black text-white uppercase mb-2 tracking-wider">
               {group.name}
             </h1>
-            <div className="h-1 w-32 bg-gradient-to-r from-[#00f0ff] to-[#ff00aa] mb-4"></div>
+            <div className="h-1 w-32 bg-rust-primary texture-brushed mb-4"></div>
             <p className="text-[#b8b8d1] mb-8">
               Select your name to join the group
             </p>
@@ -122,11 +122,11 @@ export default function GroupLobbyPage({ params }: { params: Promise<{ code: str
                   <button
                     key={player.id}
                     onClick={() => handleSelectPlayer(player.id)}
-                    className="p-6 bg-[#1a1b2e] border-2 border-[#00f0ff]/30 rounded-none hover:border-[#00f0ff] hover:scale-105 transition-all group"
+                    className="p-6 bg-bg-warm-2 border-2 border-rust-primary/30 rounded-none hover:border-rust-primary hover:scale-105 transition-all group"
                   >
                     <div className="flex flex-col items-center gap-4">
                       {player.avatar_url ? (
-                        <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-[#00f0ff] group-hover:neon-glow-cyan transition-all">
+                        <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-rust-primary group-hover:warm-glow transition-all">
                           <img
                             src={player.avatar_url}
                             alt={player.name}
@@ -134,7 +134,7 @@ export default function GroupLobbyPage({ params }: { params: Promise<{ code: str
                           />
                         </div>
                       ) : (
-                        <div className="w-24 h-24 rounded-full bg-gradient-to-br from-[#00f0ff] to-[#ff00aa] flex items-center justify-center border-2 border-[#00f0ff] group-hover:neon-glow-cyan transition-all">
+                        <div className="w-24 h-24 rounded-full bg-rust-primary flex items-center justify-center border-2 border-rust-primary group-hover:warm-glow transition-all">
                           <span className="text-3xl font-black text-black">
                             {player.name.charAt(0).toUpperCase()}
                           </span>
@@ -158,13 +158,13 @@ export default function GroupLobbyPage({ params }: { params: Promise<{ code: str
   const currentPlayer = players.find(p => p.id === currentPlayerId);
 
   return (
-    <div className="min-h-screen retro-grid relative py-16">
-      <div className="scanlines" />
+    <div className="min-h-screen industrial-base relative py-16">
+      <div className="\!-- scanlines removed --" />
       <div className="container mx-auto px-4 max-w-4xl relative z-10">
         <div className="mb-8">
           <Link
             href="/"
-            className="text-[#00f0ff] hover:text-[#ff00aa] flex items-center gap-2 transition-colors"
+            className="text-rust-primary hover:text-amber-secondary flex items-center gap-2 transition-colors"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -179,14 +179,14 @@ export default function GroupLobbyPage({ params }: { params: Promise<{ code: str
               <h1 className="text-4xl md:text-5xl font-black text-white uppercase mb-2 tracking-wider">
                 {group.name}
               </h1>
-              <div className="h-1 w-32 bg-gradient-to-r from-[#00f0ff] to-[#ff00aa] mb-4"></div>
+              <div className="h-1 w-32 bg-rust-primary texture-brushed mb-4"></div>
               <p className="text-[#b8b8d1]">
-                Playing as: <span className="text-[#00f0ff] font-bold">{currentPlayer?.name}</span>
+                Playing as: <span className="text-rust-primary font-bold">{currentPlayer?.name}</span>
               </p>
             </div>
             <div className="text-center">
               <div className="text-xs text-[#7a7a9e] uppercase tracking-wider mb-1">Group Code</div>
-              <div className="text-3xl font-black text-[#39ff14] font-mono neon-text-green">
+              <div className="text-3xl font-black text-burnt-orange font-mono ">
                 {code.toUpperCase()}
               </div>
             </div>
@@ -200,12 +200,12 @@ export default function GroupLobbyPage({ params }: { params: Promise<{ code: str
                   key={player.id}
                   className={`text-center p-4 rounded-none ${
                     player.id === currentPlayerId
-                      ? 'bg-[#00f0ff]/10 border-2 border-[#00f0ff]'
-                      : 'bg-[#1a1b2e] border-2 border-[#00f0ff]/20'
+                      ? 'bg-[#00f0ff]/10 border-2 border-rust-primary'
+                      : 'bg-bg-warm-2 border-2 border-rust-primary/20'
                   }`}
                 >
                   {player.avatar_url ? (
-                    <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-[#00f0ff] mx-auto mb-2">
+                    <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-rust-primary mx-auto mb-2">
                       <img
                         src={player.avatar_url}
                         alt={player.name}
@@ -213,7 +213,7 @@ export default function GroupLobbyPage({ params }: { params: Promise<{ code: str
                       />
                     </div>
                   ) : (
-                    <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#00f0ff] to-[#ff00aa] flex items-center justify-center border-2 border-[#00f0ff] mx-auto mb-2">
+                    <div className="w-16 h-16 rounded-full bg-rust-primary flex items-center justify-center border-2 border-rust-primary mx-auto mb-2">
                       <span className="text-2xl font-black text-black">
                         {player.name.charAt(0).toUpperCase()}
                       </span>
@@ -225,18 +225,18 @@ export default function GroupLobbyPage({ params }: { params: Promise<{ code: str
             </div>
           </div>
 
-          <div className="border-t-2 border-[#00f0ff]/30 pt-8">
+          <div className="border-t-2 border-rust-primary/30 pt-8">
             <h2 className="text-xl font-black text-white uppercase mb-4 tracking-wider">Play a Quad</h2>
             <div className="flex flex-col gap-3">
               <Link
                 href="/"
-                className="px-6 py-4 bg-gradient-to-r from-[#00f0ff] to-[#ff00aa] text-black rounded-none font-bold uppercase tracking-wider hover:scale-105 transition-all text-center"
+                className="px-6 py-4 bg-rust-primary texture-brushed text-black rounded-none font-bold uppercase tracking-wider hover:scale-105 transition-all text-center"
               >
                 Browse Public Quads
               </Link>
               <Link
                 href="/create"
-                className="px-6 py-4 border-2 border-[#00f0ff] text-[#00f0ff] rounded-none font-bold uppercase tracking-wider hover:bg-[#00f0ff] hover:text-black transition-all text-center"
+                className="px-6 py-4 border-2 border-rust-primary text-rust-primary rounded-none font-bold uppercase tracking-wider hover:bg-[#00f0ff] hover:text-black transition-all text-center"
               >
                 Create a Quad for This Group
               </Link>

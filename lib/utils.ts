@@ -1,30 +1,8 @@
-import { supabase } from './supabase';
+import { clsx, type ClassValue } from "clsx"
+import { twMerge } from "tailwind-merge"
 
-const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-
-export async function generateUniqueGroupCode(): Promise<string> {
-  let code: string;
-  let exists = true;
-
-  while (exists) {
-    code = Array.from({ length: 6 }, () =>
-      CHARS[Math.floor(Math.random() * CHARS.length)]
-    ).join('');
-
-    const { data } = await supabase
-      .from('groups')
-      .select('id')
-      .eq('code', code)
-      .single();
-
-    exists = !!data;
-  }
-
-  return code!;
-}
-
-export function cn(...classes: (string | undefined | null | false)[]): string {
-  return classes.filter(Boolean).join(' ');
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs))
 }
 
 export function getInitials(name: string): string {
@@ -34,4 +12,13 @@ export function getInitials(name: string): string {
     .join('')
     .toUpperCase()
     .slice(0, 2);
+}
+
+export async function generateUniqueGroupCode(): Promise<string> {
+  const characters = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  let code = '';
+  for (let i = 0; i < 6; i++) {
+    code += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
+  return code;
 }

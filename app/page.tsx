@@ -176,17 +176,14 @@ export default function Home() {
 
   if (loading) {
     return (
-      <div className="min-h-screen retro-grid relative flex items-center justify-center">
-        <div className="scanlines" />
-        <div className="text-xl text-[#00f0ff] neon-text-cyan relative z-10">Loading...</div>
+      <div className="min-h-screen industrial-base relative flex items-center justify-center">
+        <div className="text-xl text-rust-primary relative z-10 font-bold uppercase tracking-wider">Loading...</div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen retro-grid relative">
-      {/* Scanline Effect */}
-      <div className="scanlines" />
+    <div className="min-h-screen industrial-base relative">
 
       {/* Hero Section */}
       <div className="container mx-auto px-4 py-20 relative z-10">
@@ -194,67 +191,66 @@ export default function Home() {
           {/* Logo/Title */}
           <div className="mb-6 inline-block">
             <div className="relative">
-              <h1 className="text-8xl md:text-9xl font-black tracking-tighter mb-2"
+              <h1 className="text-8xl md:text-9xl font-black tracking-tighter mb-2 text-letterpress"
                   style={{
-                    background: 'linear-gradient(135deg, #00f0ff 0%, #ff00aa 50%, #ffed00 100%)',
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent',
-                    backgroundClip: 'text'
+                    color: '#c87341'
                   }}>
                 QUADRANTS
               </h1>
-              <div className="absolute -bottom-2 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#00f0ff] to-transparent opacity-50"></div>
+              <div className="absolute -bottom-2 left-0 right-0 h-1 bg-rust-primary opacity-50"></div>
             </div>
           </div>
 
           {/* Tagline */}
-          <p className="text-xl md:text-2xl text-[#b8b8d1] max-w-3xl mx-auto mb-12 leading-relaxed font-light">
+          <p className="text-xl md:text-2xl text-[#b8b8d1] max-w-3xl mx-auto mb-12 leading-relaxed">
             Discover alignment through visual data.
             <br />
-            <span className="text-[#00f0ff]">Map perspectives.</span>{' '}
-            <span className="text-[#ff00aa]">Find connections.</span>{' '}
-            <span className="text-[#ffed00]">Unlock insights.</span>
+            <span className="text-rust-primary font-bold">Map perspectives.</span>{' '}
+            <span className="text-amber-secondary font-bold">Find connections.</span>{' '}
+            <span className="text-burnt-orange font-bold">Unlock insights.</span>
           </p>
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
             <Link
               href="/create"
-              className="group relative px-10 py-5 bg-gradient-to-r from-[#00f0ff] to-[#ff00aa] rounded-none font-bold text-lg text-black uppercase tracking-wider overflow-hidden transition-all hover:scale-105"
+              className="group relative px-10 py-5 bg-burnt-orange texture-brushed rounded-none font-bold text-lg text-black uppercase tracking-wider overflow-hidden transition-all hover:scale-105"
+              style={{
+                boxShadow: 'inset 0 1px 2px rgba(255, 147, 65, 0.2), inset 0 -1px 2px rgba(0, 0, 0, 0.3), 0 4px 8px rgba(0, 0, 0, 0.3)'
+              }}
             >
-              <span className="relative z-10">Create Quad</span>
-              <div className="absolute inset-0 bg-gradient-to-r from-[#ff00aa] to-[#00f0ff] opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              <span className="relative z-10" style={{ textShadow: '0 1px 2px rgba(0, 0, 0, 0.5)' }}>Create Quad</span>
             </Link>
 
             <Link
               href="/group"
-              className="px-10 py-5 border-2 border-[#00f0ff] text-[#00f0ff] rounded-none font-bold text-lg uppercase tracking-wider hover:bg-[#00f0ff] hover:text-black transition-all neon-glow-cyan"
+              className="px-10 py-5 border-3 border-rust-primary text-rust-primary rounded-none font-bold text-lg uppercase tracking-wider hover:bg-rust-primary hover:text-black transition-all warm-glow"
             >
               Join Group
             </Link>
 
             <Link
               href="/suggest"
-              className="px-10 py-5 border-2 border-[#7a7a9e] text-[#b8b8d1] rounded-none font-bold text-lg uppercase tracking-wider hover:border-[#00f0ff] hover:text-[#00f0ff] transition-all"
+              className="px-10 py-5 border-2 border-steel-gray text-[#b8b8d1] rounded-none font-bold text-lg uppercase tracking-wider hover:border-rust-primary hover:text-rust-primary transition-all"
             >
               Suggest Question
             </Link>
           </div>
 
           {/* Stats Bar */}
-          <div className="inline-flex gap-8 px-8 py-4 bg-[#1a1b2e] border border-[#00f0ff]/20 rounded-none">
+          <div className="inline-flex gap-8 px-8 py-4 bg-bg-warm-2 border-embossed rounded-none texture-concrete">
             <div className="text-center">
-              <div className="text-3xl font-bold text-[#00f0ff] neon-text-cyan">{quads.length}</div>
+              <div className="text-3xl font-bold text-rust-primary">{quads.length}</div>
               <div className="text-xs text-[#7a7a9e] uppercase tracking-wider">Quads</div>
             </div>
-            <div className="w-px bg-[#00f0ff]/20"></div>
+            <div className="w-px bg-rust-primary/30"></div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-[#ff00aa] neon-text-magenta">{completedQuadIds.size}</div>
+              <div className="text-3xl font-bold text-amber-secondary">{completedQuadIds.size}</div>
               <div className="text-xs text-[#7a7a9e] uppercase tracking-wider">Completed</div>
             </div>
-            <div className="w-px bg-[#00f0ff]/20"></div>
+            <div className="w-px bg-rust-primary/30"></div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-[#ffed00]">∞</div>
+              <div className="text-3xl font-bold text-burnt-orange">∞</div>
               <div className="text-xs text-[#7a7a9e] uppercase tracking-wider">Insights</div>
             </div>
           </div>
@@ -262,39 +258,39 @@ export default function Home() {
           {/* Current Group Indicator */}
           {currentGroup && (
             <div className="mt-8 w-full flex justify-center">
-              <div className="bg-[#1a1b2e] border-2 border-[#00f0ff]/50 rounded-none p-6 max-w-3xl w-full">
+              <div className="bg-bg-warm-2 border-embossed rounded-none p-6 max-w-3xl w-full texture-concrete">
                 <div className="flex flex-col gap-4">
                   <div className="flex items-center justify-between gap-6">
                     <div>
                       <p className="text-xs text-[#7a7a9e] uppercase tracking-wider mb-1">Currently In</p>
-                      <p className="text-2xl font-black text-[#00f0ff] neon-text-cyan uppercase tracking-wider">
+                      <p className="text-2xl font-black text-rust-primary uppercase tracking-wider">
                         {currentGroup.name}
                       </p>
                       <p className="text-sm text-[#b8b8d1] font-mono mt-1">Code: {currentGroup.code}</p>
                     </div>
                     <button
                       onClick={handleChangeGroup}
-                      className="px-6 py-3 border-2 border-[#ff00aa] text-[#ff00aa] rounded-none font-bold uppercase text-xs tracking-wider hover:bg-[#ff00aa] hover:text-black transition-all whitespace-nowrap"
+                      className="px-6 py-3 border-3 border-amber-secondary text-amber-secondary rounded-none font-bold uppercase text-xs tracking-wider hover:bg-amber-secondary hover:text-black transition-all whitespace-nowrap"
                     >
                       Change Group
                     </button>
                   </div>
 
                   {/* Shareable Link */}
-                  <div className="pt-4 border-t border-[#00f0ff]/20">
+                  <div className="pt-4 border-t border-rust-primary/30">
                     <p className="text-xs text-[#7a7a9e] uppercase tracking-wider mb-2">Invite Link</p>
                     <div className="flex items-center gap-2">
                       <input
                         type="text"
                         readOnly
                         value={`${typeof window !== 'undefined' ? window.location.origin : ''}/group/${currentGroup.code}`}
-                        className="flex-1 px-4 py-2 bg-[#0a0b1a] border border-[#00f0ff]/20 text-[#00f0ff] rounded-none font-mono text-sm"
+                        className="flex-1 px-4 py-2 bg-bg-warm-1 border-2 border-rust-primary/30 text-rust-primary rounded-none font-mono text-sm"
                       />
                       <button
                         onClick={() => {
                           navigator.clipboard.writeText(`${window.location.origin}/group/${currentGroup.code}`);
                         }}
-                        className="px-4 py-2 border-2 border-[#00f0ff] text-[#00f0ff] rounded-none font-bold uppercase text-xs tracking-wider hover:bg-[#00f0ff] hover:text-black transition-all whitespace-nowrap"
+                        className="px-4 py-2 border-3 border-rust-primary text-rust-primary rounded-none font-bold uppercase text-xs tracking-wider hover:bg-rust-primary hover:text-black transition-all whitespace-nowrap"
                       >
                         Copy Link
                       </button>
@@ -310,11 +306,11 @@ export default function Home() {
         {quads.length > 0 && (
           <div className="mt-20">
             <div className="flex items-center gap-4 mb-10">
-              <div className="h-px bg-gradient-to-r from-transparent via-[#00f0ff] to-transparent flex-1"></div>
+              <div className="h-px bg-rust-primary/50 flex-1"></div>
               <h2 className="text-4xl font-black text-white uppercase tracking-wider">
-                <span className="text-[#00f0ff]">Popular</span> Quads
+                <span className="text-rust-primary">Popular</span> Quads
               </h2>
-              <div className="h-px bg-gradient-to-r from-transparent via-[#00f0ff] to-transparent flex-1"></div>
+              <div className="h-px bg-rust-primary/50 flex-1"></div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -340,7 +336,7 @@ export default function Home() {
       </div>
 
       {/* Bottom Gradient */}
-      <div className="fixed bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#0a0b1a] to-transparent pointer-events-none"></div>
+      <div className="fixed bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-bg-warm-1 to-transparent pointer-events-none"></div>
     </div>
   );
 }

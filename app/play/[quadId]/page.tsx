@@ -166,18 +166,18 @@ export default function PlayPage({ params }: { params: Promise<{ quadId: string 
 
   if (loading) {
     return (
-      <div className="min-h-screen retro-grid relative flex items-center justify-center">
-        <div className="text-xl text-[#00f0ff] neon-text-cyan">Loading...</div>
+      <div className="min-h-screen industrial-base relative flex items-center justify-center">
+        <div className="text-xl text-rust-primary ">Loading...</div>
       </div>
     );
   }
 
   if (!quad || questions.length === 0) {
     return (
-      <div className="min-h-screen retro-grid relative flex items-center justify-center">
+      <div className="min-h-screen industrial-base relative flex items-center justify-center">
         <div className="text-center premium-card p-12 rounded-none max-w-lg">
           <h1 className="text-4xl font-black text-white uppercase mb-4">Quad Not Found</h1>
-          <Link href="/" className="text-[#00f0ff] hover:text-[#ff00aa] transition-colors">
+          <Link href="/" className="text-rust-primary hover:text-amber-secondary transition-colors">
             Back to Home
           </Link>
         </div>
@@ -188,8 +188,8 @@ export default function PlayPage({ params }: { params: Promise<{ quadId: string 
   // SETUP SCREEN
   if (mode === 'setup') {
     return (
-      <div className="min-h-screen retro-grid relative py-16">
-        <div className="scanlines" />
+      <div className="min-h-screen industrial-base relative py-16">
+        <div className="\!-- scanlines removed --" />
         <div className="container mx-auto px-4 max-w-2xl relative z-10">
           <div className="premium-card rounded-none p-8">
             <h1 className="text-4xl font-black text-white uppercase mb-2 text-center">
@@ -207,19 +207,19 @@ export default function PlayPage({ params }: { params: Promise<{ quadId: string 
                 <div className="space-y-4">
                   <button
                     onClick={() => setSetupChoice('join')}
-                    className="w-full py-4 border-2 border-[#00f0ff] text-[#00f0ff] rounded-none font-bold uppercase hover:bg-[#00f0ff] hover:text-black transition-all"
+                    className="w-full py-4 border-2 border-rust-primary text-rust-primary rounded-none font-bold uppercase hover:bg-[#00f0ff] hover:text-black transition-all"
                   >
                     Join Existing Group
                   </button>
                   <button
                     onClick={() => setSetupChoice('create')}
-                    className="w-full py-4 border-2 border-[#ff00aa] text-[#ff00aa] rounded-none font-bold uppercase hover:bg-[#ff00aa] hover:text-black transition-all"
+                    className="w-full py-4 border-2 border-amber-secondary text-amber-secondary rounded-none font-bold uppercase hover:bg-[#ff00aa] hover:text-black transition-all"
                   >
                     Create New Group
                   </button>
                   <button
                     onClick={handleSoloPlay}
-                    className="w-full py-4 border-2 border-[#7a7a9e] text-[#b8b8d1] rounded-none font-bold uppercase hover:border-[#00f0ff] hover:text-[#00f0ff] transition-all"
+                    className="w-full py-4 border-2 border-[#7a7a9e] text-[#b8b8d1] rounded-none font-bold uppercase hover:border-rust-primary hover:text-rust-primary transition-all"
                   >
                     Play Solo (No Group)
                   </button>
@@ -229,7 +229,7 @@ export default function PlayPage({ params }: { params: Promise<{ quadId: string 
               <>
                 <button
                   onClick={() => setSetupChoice(null)}
-                  className="text-[#7a7a9e] hover:text-[#00f0ff] mb-4 flex items-center gap-2"
+                  className="text-[#7a7a9e] hover:text-rust-primary mb-4 flex items-center gap-2"
                 >
                   ← Back
                 </button>
@@ -242,20 +242,20 @@ export default function PlayPage({ params }: { params: Promise<{ quadId: string 
                     onChange={(e) => setJoinCode(e.target.value.toUpperCase())}
                     placeholder="GROUP CODE"
                     maxLength={6}
-                    className="w-full px-4 py-3 bg-[#1a1b2e] border-2 border-[#00f0ff]/30 text-white rounded-none focus:border-[#00f0ff] uppercase text-center font-mono text-xl"
+                    className="w-full px-4 py-3 bg-bg-warm-2 border-2 border-rust-primary/30 text-white rounded-none focus:border-rust-primary uppercase text-center font-mono text-xl"
                   />
                   <input
                     type="text"
                     value={playerName}
                     onChange={(e) => setPlayerName(e.target.value)}
                     placeholder="Your Name"
-                    className="w-full px-4 py-3 bg-[#1a1b2e] border-2 border-[#00f0ff]/30 text-white rounded-none focus:border-[#00f0ff]"
+                    className="w-full px-4 py-3 bg-bg-warm-2 border-2 border-rust-primary/30 text-white rounded-none focus:border-rust-primary"
                   />
                   <AvatarUpload onUpload={setAvatarUrl} />
                   <button
                     onClick={handleJoinGroup}
                     disabled={!joinCode || !playerName}
-                    className="w-full py-4 bg-gradient-to-r from-[#00f0ff] to-[#ff00aa] text-black rounded-none font-bold uppercase disabled:opacity-50"
+                    className="w-full py-4 bg-rust-primary texture-brushed text-black rounded-none font-bold uppercase disabled:opacity-50"
                   >
                     Join & Start Playing
                   </button>
@@ -265,7 +265,7 @@ export default function PlayPage({ params }: { params: Promise<{ quadId: string 
               <>
                 <button
                   onClick={() => setSetupChoice(null)}
-                  className="text-[#7a7a9e] hover:text-[#00f0ff] mb-4 flex items-center gap-2"
+                  className="text-[#7a7a9e] hover:text-rust-primary mb-4 flex items-center gap-2"
                 >
                   ← Back
                 </button>
@@ -277,20 +277,20 @@ export default function PlayPage({ params }: { params: Promise<{ quadId: string 
                     value={groupName}
                     onChange={(e) => setGroupName(e.target.value)}
                     placeholder="Group Name"
-                    className="w-full px-4 py-3 bg-[#1a1b2e] border-2 border-[#00f0ff]/30 text-white rounded-none focus:border-[#00f0ff]"
+                    className="w-full px-4 py-3 bg-bg-warm-2 border-2 border-rust-primary/30 text-white rounded-none focus:border-rust-primary"
                   />
                   <input
                     type="text"
                     value={playerName}
                     onChange={(e) => setPlayerName(e.target.value)}
                     placeholder="Your Name"
-                    className="w-full px-4 py-3 bg-[#1a1b2e] border-2 border-[#00f0ff]/30 text-white rounded-none focus:border-[#00f0ff]"
+                    className="w-full px-4 py-3 bg-bg-warm-2 border-2 border-rust-primary/30 text-white rounded-none focus:border-rust-primary"
                   />
                   <AvatarUpload onUpload={setAvatarUrl} />
                   <button
                     onClick={handleCreateGroup}
                     disabled={!groupName || !playerName}
-                    className="w-full py-4 bg-gradient-to-r from-[#ff00aa] to-[#00f0ff] text-black rounded-none font-bold uppercase disabled:opacity-50"
+                    className="w-full py-4 bg-amber-secondary texture-brushed text-black rounded-none font-bold uppercase disabled:opacity-50"
                   >
                     Create & Start Playing
                   </button>
@@ -306,8 +306,8 @@ export default function PlayPage({ params }: { params: Promise<{ quadId: string 
   // COMPLETE SCREEN (Solo mode)
   if (mode === 'complete') {
     return (
-      <div className="min-h-screen retro-grid relative py-16">
-        <div className="scanlines" />
+      <div className="min-h-screen industrial-base relative py-16">
+        <div className="\!-- scanlines removed --" />
         <div className="container mx-auto px-4 max-w-2xl relative z-10">
           <div className="premium-card rounded-none p-12 text-center">
             <h1 className="text-5xl font-black text-white uppercase mb-4">Complete!</h1>
@@ -317,13 +317,13 @@ export default function PlayPage({ params }: { params: Promise<{ quadId: string 
             <div className="space-y-4">
               <Link
                 href={`/group`}
-                className="block w-full py-4 bg-gradient-to-r from-[#00f0ff] to-[#ff00aa] text-black rounded-none font-bold uppercase"
+                className="block w-full py-4 bg-rust-primary texture-brushed text-black rounded-none font-bold uppercase"
               >
                 Create Group & Invite Friends
               </Link>
               <Link
                 href="/"
-                className="block w-full py-4 border-2 border-[#7a7a9e] text-[#b8b8d1] rounded-none font-bold uppercase hover:border-[#00f0ff] hover:text-[#00f0ff] transition-all"
+                className="block w-full py-4 border-2 border-[#7a7a9e] text-[#b8b8d1] rounded-none font-bold uppercase hover:border-rust-primary hover:text-rust-primary transition-all"
               >
                 Back to Home
               </Link>
@@ -340,13 +340,13 @@ export default function PlayPage({ params }: { params: Promise<{ quadId: string 
   const isFirstQuestion = currentIndex === 0;
 
   return (
-    <div className="min-h-screen retro-grid relative py-16">
-      <div className="scanlines" />
+    <div className="min-h-screen industrial-base relative py-16">
+      <div className="\!-- scanlines removed --" />
 
       <div className="container mx-auto px-4 max-w-3xl relative z-10">
         <div className="premium-card rounded-none p-8 md:p-12">
           {createdGroupCode && (
-            <div className="mb-6 p-4 bg-green-900/20 border-2 border-[#39ff14] text-[#39ff14] text-center">
+            <div className="mb-6 p-4 bg-green-900/20 border-2 border-burnt-orange text-burnt-orange text-center">
               <div className="font-bold mb-1">Group Created!</div>
               <div>Share code: <span className="text-2xl font-mono">{createdGroupCode}</span></div>
             </div>
@@ -357,15 +357,15 @@ export default function PlayPage({ params }: { params: Promise<{ quadId: string 
               {quad.name}
             </h1>
             <p className="text-[#b8b8d1]">
-              Question <span className="text-[#00f0ff]">{currentIndex + 1}</span> of {questions.length}
+              Question <span className="text-rust-primary">{currentIndex + 1}</span> of {questions.length}
               {isSoloMode && <span className="ml-2 text-[#7a7a9e]">(Solo Mode)</span>}
             </p>
           </div>
 
           <div className="mb-8">
-            <div className="w-full h-2 bg-[#1a1b2e] border border-[#00f0ff]/30">
+            <div className="w-full h-2 bg-bg-warm-2 border border-rust-primary/30">
               <div
-                className="h-full bg-gradient-to-r from-[#00f0ff] to-[#ff00aa] transition-all duration-300"
+                className="h-full bg-rust-primary texture-brushed transition-all duration-300"
                 style={{ width: `${((currentIndex + 1) / questions.length) * 100}%` }}
               />
             </div>
@@ -399,7 +399,7 @@ export default function PlayPage({ params }: { params: Promise<{ quadId: string 
             <button
               onClick={handlePrevious}
               disabled={isFirstQuestion}
-              className="px-6 py-3 border-2 border-[#7a7a9e] text-[#b8b8d1] rounded-none font-bold uppercase tracking-wider hover:border-[#00f0ff] hover:text-[#00f0ff] disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+              className="px-6 py-3 border-2 border-[#7a7a9e] text-[#b8b8d1] rounded-none font-bold uppercase tracking-wider hover:border-rust-primary hover:text-rust-primary disabled:opacity-30 disabled:cursor-not-allowed transition-all"
             >
               Previous
             </button>
@@ -407,7 +407,7 @@ export default function PlayPage({ params }: { params: Promise<{ quadId: string 
             {!isLastQuestion ? (
               <button
                 onClick={handleNext}
-                className="flex-1 px-6 py-3 bg-gradient-to-r from-[#00f0ff] to-[#ff00aa] text-black rounded-none font-bold uppercase tracking-wider hover:scale-105 transition-all"
+                className="flex-1 px-6 py-3 bg-rust-primary texture-brushed text-black rounded-none font-bold uppercase tracking-wider hover:scale-105 transition-all"
               >
                 Next
               </button>
@@ -415,7 +415,7 @@ export default function PlayPage({ params }: { params: Promise<{ quadId: string 
               <button
                 onClick={handleSubmit}
                 disabled={submitting}
-                className="flex-1 px-6 py-3 bg-gradient-to-r from-[#39ff14] to-[#00f0ff] text-black rounded-none font-bold uppercase tracking-wider hover:scale-105 transition-all disabled:opacity-50"
+                className="flex-1 px-6 py-3 bg-burnt-orange texture-brushed text-black rounded-none font-bold uppercase tracking-wider hover:scale-105 transition-all disabled:opacity-50"
               >
                 {submitting ? 'Submitting...' : isSoloMode ? 'Finish' : 'Submit Answers'}
               </button>

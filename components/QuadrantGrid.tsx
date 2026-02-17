@@ -131,7 +131,11 @@ export function QuadrantGrid({
       <div className="flex justify-end">
         <button
           onClick={handleExportPNG}
-          className="px-6 py-3 bg-gradient-to-r from-[#00f0ff] to-[#ff00aa] text-black rounded-none font-bold uppercase text-xs tracking-wider hover:scale-105 transition-all"
+          className="px-6 py-3 bg-rust-primary texture-brushed text-black rounded-none font-bold uppercase text-xs tracking-wider hover:scale-105 transition-all"
+          style={{
+            boxShadow: 'inset 0 1px 2px rgba(255, 147, 65, 0.2), inset 0 -1px 2px rgba(0, 0, 0, 0.3), 0 4px 8px rgba(0, 0, 0, 0.3)',
+            textShadow: '0 1px 2px rgba(0, 0, 0, 0.5)'
+          }}
         >
           Export as PNG
         </button>
@@ -152,9 +156,13 @@ export function QuadrantGrid({
                   onClick={() => onAxisChange('x', q.id)}
                   className={`w-full text-left px-4 py-3 rounded-none transition-all text-sm ${
                     selectedXQuestionId === q.id
-                      ? 'bg-gradient-to-r from-[#00f0ff] to-[#ff00aa] text-black font-bold'
-                      : 'bg-[#1a1b2e] border-2 border-[#00f0ff]/30 text-[#b8b8d1] hover:border-[#00f0ff] hover:text-white'
+                      ? 'bg-rust-primary texture-brushed text-black font-bold'
+                      : 'bg-bg-warm-2 border-2 border-rust-primary/30 text-[#b8b8d1] hover:border-rust-primary hover:text-white texture-concrete'
                   }`}
+                  style={selectedXQuestionId === q.id ? {
+                    boxShadow: 'inset 0 1px 2px rgba(255, 147, 65, 0.2), inset 0 -1px 2px rgba(0, 0, 0, 0.3)',
+                    textShadow: '0 1px 2px rgba(0, 0, 0, 0.5)'
+                  } : {}}
                 >
                   {q.prompt}
                 </button>
@@ -163,37 +171,37 @@ export function QuadrantGrid({
           </div>
 
           {/* Grid (center) */}
-          <div ref={gridRef} className="relative w-full aspect-square max-w-4xl mx-auto bg-[#0a0b1a] rounded-none border-2 border-[#00f0ff]/50 p-8">
-            {/* Quadrant backgrounds */}
+          <div ref={gridRef} className="relative w-full aspect-square max-w-4xl mx-auto bg-bg-warm-1 rounded-none border-embossed p-8 texture-concrete">
+            {/* Quadrant backgrounds with textures */}
             <div className="absolute inset-8 grid grid-cols-2 grid-rows-2 pointer-events-none">
-              <div className="bg-[#00f0ff]/5"></div>
-              <div className="bg-[#ff00aa]/5"></div>
-              <div className="bg-[#39ff14]/5"></div>
-              <div className="bg-[#ffed00]/5"></div>
+              <div className="bg-rust-primary/5 texture-dots"></div>
+              <div className="bg-amber-secondary/5 texture-diagonal"></div>
+              <div className="bg-burnt-orange/5 texture-dots"></div>
+              <div className="bg-steel-gray/5 texture-diagonal"></div>
             </div>
 
-            {/* Axes */}
+            {/* Axes - Blueprint style */}
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <div className="absolute w-full h-0.5 bg-[#00f0ff]/50"></div>
-              <div className="absolute h-full w-0.5 bg-[#00f0ff]/50"></div>
+              <div className="absolute w-full h-0.5 bg-steel-gray"></div>
+              <div className="absolute h-full w-0.5 bg-steel-gray"></div>
             </div>
 
             {/* Axis labels - repositioned */}
             {/* X-Axis left label (left side where value 1 is) */}
-            <div className="absolute right-[52%] bottom-6 text-xs font-bold text-[#00f0ff] uppercase tracking-wider max-w-[150px] text-right">
+            <div className="absolute right-[52%] bottom-6 text-xs font-bold text-rust-primary uppercase tracking-wider max-w-[150px] text-right">
               {yQuestion.label_left}
             </div>
             {/* X-Axis right label (right side where value 10 is) */}
-            <div className="absolute left-[52%] top-6 text-xs font-bold text-[#ff00aa] uppercase tracking-wider max-w-[150px]">
+            <div className="absolute left-[52%] top-6 text-xs font-bold text-amber-secondary uppercase tracking-wider max-w-[150px]">
               {yQuestion.label_right}
             </div>
 
             {/* Y-Axis left label (top, where value 1 is) */}
-            <div className="absolute left-6 top-[48%] text-xs font-bold text-[#00f0ff] uppercase tracking-wider max-w-[120px] -translate-y-full pb-2">
+            <div className="absolute left-6 top-[48%] text-xs font-bold text-rust-primary uppercase tracking-wider max-w-[120px] -translate-y-full pb-2">
               {xQuestion.label_left}
             </div>
             {/* Y-Axis right label (bottom, where value 10 is) */}
-            <div className="absolute right-6 bottom-[48%] text-xs font-bold text-[#ff00aa] uppercase tracking-wider max-w-[120px] text-right translate-y-full pt-2">
+            <div className="absolute right-6 bottom-[48%] text-xs font-bold text-amber-secondary uppercase tracking-wider max-w-[120px] text-right translate-y-full pt-2">
               {xQuestion.label_right}
             </div>
 
@@ -221,9 +229,9 @@ export function QuadrantGrid({
 
                   {/* Tooltip */}
                   {hoveredPlayer === player.id && (
-                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2 bg-[#00f0ff] text-black text-sm font-bold rounded-none whitespace-nowrap pointer-events-none z-10 uppercase tracking-wider neon-glow-cyan">
+                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2 bg-rust-primary text-black text-sm font-bold rounded-none whitespace-nowrap pointer-events-none z-10 uppercase tracking-wider warm-glow">
                       {player.name}
-                      <div className="absolute top-full left-1/2 -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-[#00f0ff]"></div>
+                      <div className="absolute top-full left-1/2 -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-rust-primary"></div>
                     </div>
                   )}
                 </div>
@@ -243,9 +251,13 @@ export function QuadrantGrid({
                   onClick={() => onAxisChange('y', q.id)}
                   className={`w-full text-left px-4 py-3 rounded-none transition-all text-sm ${
                     selectedYQuestionId === q.id
-                      ? 'bg-gradient-to-r from-[#ff00aa] to-[#00f0ff] text-black font-bold'
-                      : 'bg-[#1a1b2e] border-2 border-[#ff00aa]/30 text-[#b8b8d1] hover:border-[#ff00aa] hover:text-white'
+                      ? 'bg-amber-secondary texture-brushed text-black font-bold'
+                      : 'bg-bg-warm-2 border-2 border-amber-secondary/30 text-[#b8b8d1] hover:border-amber-secondary hover:text-white texture-concrete'
                   }`}
+                  style={selectedYQuestionId === q.id ? {
+                    boxShadow: 'inset 0 1px 2px rgba(255, 152, 0, 0.2), inset 0 -1px 2px rgba(0, 0, 0, 0.3)',
+                    textShadow: '0 1px 2px rgba(0, 0, 0, 0.5)'
+                  } : {}}
                 >
                   {q.prompt}
                 </button>
