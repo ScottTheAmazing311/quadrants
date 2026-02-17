@@ -214,22 +214,26 @@ export default function ResultsPage({ params }: { params: Promise<{ quadId: stri
       const strength = Math.abs(selectedPair.coefficient);
       const strengthWord = strength > 0.7 ? 'strongly' : strength > 0.4 ? 'moderately' : 'slightly';
 
-      // Use means to determine which label to display (> 5.5 = right label, < 5.5 = left label)
-      const q1Label = selectedPair.mean1 > 5.5 ? selectedPair.q1.label_right : selectedPair.q1.label_left;
-      const q2Label = selectedPair.mean2 > 5.5 ? selectedPair.q2.label_right : selectedPair.q2.label_left;
+      // Determine labels based on correlation type
+      let q1Label: string;
+      let q2Label: string;
 
-      // Determine relationship based on correlation sign and means
-      let direction: string;
       if (selectedPair.coefficient > 0) {
-        // Positive correlation: both high or both low
-        direction = 'also tend to';
+        // Positive correlation: both groups move together
+        // Use the majority preference for each question
+        q1Label = selectedPair.mean1 > 5.5 ? selectedPair.q1.label_right : selectedPair.q1.label_left;
+        q2Label = selectedPair.mean2 > 5.5 ? selectedPair.q2.label_right : selectedPair.q2.label_left;
       } else {
-        // Negative correlation: one high, one low
-        direction = 'tend NOT to';
+        // Negative correlation: one high, other low
+        // Flip q1 to talk about the minority group (makes a positive statement)
+        // Example: Instead of "People who prefer Elden Ring tend NOT to prefer Beefy 5 Layer"
+        // Say: "People who prefer Breath of the Wild tend to prefer Beefy 5 Layer"
+        q1Label = selectedPair.mean1 > 5.5 ? selectedPair.q1.label_left : selectedPair.q1.label_right;
+        q2Label = selectedPair.mean2 > 5.5 ? selectedPair.q2.label_right : selectedPair.q2.label_left;
       }
 
       setCorrelationMessage(
-        `People who prefer "${q1Label}" ${strengthWord} ${direction} prefer "${q2Label}"`
+        `People who prefer "${q1Label}" ${strengthWord} tend to prefer "${q2Label}"`
       );
     } else {
       setCorrelationMessage("No significant correlations found");
