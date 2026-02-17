@@ -12,6 +12,7 @@ interface QuadrantGridProps {
   selectedXQuestionId: string;
   selectedYQuestionId: string;
   onAxisChange?: (axis: 'x' | 'y', questionId: string) => void;
+  hideSelectors?: boolean;
 }
 
 interface PlayerPosition {
@@ -28,11 +29,15 @@ export function QuadrantGrid({
   players,
   selectedXQuestionId,
   selectedYQuestionId,
-  onAxisChange
+  onAxisChange,
+  hideSelectors = false
 }: QuadrantGridProps) {
   const [hoveredPlayer, setHoveredPlayer] = useState<string | null>(null);
   const [showAxisSelectors, setShowAxisSelectors] = useState(true);
   const gridRef = useRef<HTMLDivElement>(null);
+
+  // Use hideSelectors prop to override internal state
+  const shouldShowSelectors = !hideSelectors && showAxisSelectors;
 
   const handleExportPNG = async () => {
     if (!gridRef.current) {
@@ -171,7 +176,7 @@ export function QuadrantGrid({
         </div>
 
         {/* Axis selectors with buttons */}
-        {onAxisChange && showAxisSelectors ? (
+        {onAxisChange && shouldShowSelectors ? (
           <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr_300px] gap-8 items-start">
           {/* X-Axis questions (left side) */}
           <div>

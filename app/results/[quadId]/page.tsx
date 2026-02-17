@@ -19,6 +19,7 @@ export default function ResultsPage({ params }: { params: Promise<{ quadId: stri
   const [isSoloMode, setIsSoloMode] = useState(false);
   const [loading, setLoading] = useState(true);
   const [correlationMessage, setCorrelationMessage] = useState<string | null>(null);
+  const [showingCorrelation, setShowingCorrelation] = useState(false);
 
   useEffect(() => {
     const loadData = async () => {
@@ -181,6 +182,7 @@ export default function ResultsPage({ params }: { params: Promise<{ quadId: stri
       // Update the grid to show this correlation
       setSelectedXQuestionId(bestPair.q1.id);
       setSelectedYQuestionId(bestPair.q2.id);
+      setShowingCorrelation(true);
 
       // Generate correlation message
       const strength = Math.abs(bestPair.coefficient);
@@ -195,6 +197,7 @@ export default function ResultsPage({ params }: { params: Promise<{ quadId: stri
       );
     } else {
       setCorrelationMessage("No significant correlations found");
+      setShowingCorrelation(false);
     }
   };
 
@@ -270,7 +273,10 @@ export default function ResultsPage({ params }: { params: Promise<{ quadId: stri
                       <p className="text-white font-bold">{correlationMessage}</p>
                     </div>
                     <button
-                      onClick={() => setCorrelationMessage(null)}
+                      onClick={() => {
+                        setCorrelationMessage(null);
+                        setShowingCorrelation(false);
+                      }}
                       className="ml-auto text-burnt-orange hover:text-amber-secondary transition-colors"
                     >
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -287,11 +293,17 @@ export default function ResultsPage({ params }: { params: Promise<{ quadId: stri
                 players={players}
                 selectedXQuestionId={selectedXQuestionId}
                 selectedYQuestionId={selectedYQuestionId}
+                hideSelectors={showingCorrelation}
                 onAxisChange={(axis, questionId) => {
                   if (axis === 'x') {
                     setSelectedXQuestionId(questionId);
                   } else {
                     setSelectedYQuestionId(questionId);
+                  }
+                  // Reset correlation view when manually changing questions
+                  if (showingCorrelation) {
+                    setShowingCorrelation(false);
+                    setCorrelationMessage(null);
                   }
                 }}
               />
