@@ -353,8 +353,8 @@ export function QuadrantGrid({
           </div>
         </div>
         ) : (
-          // Grid only view (larger)
-          <div className="max-w-6xl mx-auto">
+          // Grid only view (correlation mode - smaller)
+          <div className="max-w-4xl mx-auto">
             <div className="relative w-full aspect-square bg-bg-warm-1 rounded-none border-embossed p-8 texture-concrete">
               {/* Quadrant backgrounds with textures */}
               <div className="absolute inset-8 grid grid-cols-2 grid-rows-2 pointer-events-none">
