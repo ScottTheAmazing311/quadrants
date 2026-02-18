@@ -34,6 +34,7 @@ export function QuadrantGrid({
 }: QuadrantGridProps) {
   const [hoveredPlayer, setHoveredPlayer] = useState<string | null>(null);
   const [showAxisSelectors, setShowAxisSelectors] = useState(true);
+  const [copyStatus, setCopyStatus] = useState<'idle' | 'copying' | 'success' | 'error'>('idle');
   const gridRef = useRef<HTMLDivElement>(null);
 
   // Use hideSelectors prop to override internal state
@@ -60,6 +61,41 @@ export function QuadrantGrid({
       document.body.removeChild(link);
     } catch (error) {
       console.error('Failed to export PNG:', error);
+    }
+  };
+
+  const handleCopyToClipboard = async () => {
+    if (!gridRef.current) {
+      console.error('Export container ref not found');
+      return;
+    }
+
+    setCopyStatus('copying');
+
+    try {
+      const dataUrl = await toPng(gridRef.current, {
+        quality: 1,
+        pixelRatio: 3,
+        backgroundColor: '#1a1410',
+      });
+
+      // Convert data URL to blob
+      const response = await fetch(dataUrl);
+      const blob = await response.blob();
+
+      // Copy to clipboard
+      await navigator.clipboard.write([
+        new ClipboardItem({
+          'image/png': blob
+        })
+      ]);
+
+      setCopyStatus('success');
+      setTimeout(() => setCopyStatus('idle'), 2000);
+    } catch (error) {
+      console.error('Failed to copy to clipboard:', error);
+      setCopyStatus('error');
+      setTimeout(() => setCopyStatus('idle'), 2000);
     }
   };
 
@@ -143,6 +179,23 @@ export function QuadrantGrid({
             {showAxisSelectors ? 'Hide' : 'Show'} Questions
           </button>
         )}
+        <button
+          onClick={handleCopyToClipboard}
+          disabled={copyStatus === 'copying'}
+          className={`px-6 py-3 rounded-none font-bold uppercase text-xs tracking-wider transition-all ${
+            copyStatus === 'success'
+              ? 'bg-burnt-orange texture-brushed text-black'
+              : copyStatus === 'error'
+              ? 'bg-red-600 text-white'
+              : 'border-2 border-amber-secondary text-amber-secondary hover:bg-amber-secondary hover:text-black'
+          }`}
+          style={copyStatus === 'success' ? {
+            boxShadow: 'inset 0 1px 2px rgba(255, 111, 60, 0.2), inset 0 -1px 2px rgba(0, 0, 0, 0.3), 0 4px 8px rgba(0, 0, 0, 0.3)',
+            textShadow: '0 1px 2px rgba(0, 0, 0, 0.5)'
+          } : {}}
+        >
+          {copyStatus === 'copying' ? '⏳ Copying...' : copyStatus === 'success' ? '✓ Copied!' : copyStatus === 'error' ? '✗ Failed' : '📋 Copy Image'}
+        </button>
         <button
           onClick={handleExportPNG}
           className="px-6 py-3 bg-rust-primary texture-brushed text-black rounded-none font-bold uppercase text-xs tracking-wider hover:scale-105 transition-all"

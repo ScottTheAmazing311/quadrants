@@ -265,7 +265,6 @@ export default function ResultsPage({ params }: { params: Promise<{ quadId: stri
   if (loading) {
     return (
       <div className="min-h-screen industrial-base relative flex items-center justify-center">
-        <div className="\!-- scanlines removed --" />
         <div className="text-xl text-rust-primary  relative z-10">Loading results...</div>
       </div>
     );
@@ -274,7 +273,6 @@ export default function ResultsPage({ params }: { params: Promise<{ quadId: stri
   if (!quad || questions.length === 0) {
     return (
       <div className="min-h-screen industrial-base relative flex items-center justify-center">
-        <div className="\!-- scanlines removed --" />
         <div className="text-center premium-card p-12 rounded-none max-w-lg relative z-10">
           <h1 className="text-4xl font-black text-white uppercase mb-4">Results Not Available</h1>
           <Link href="/" className="text-rust-primary hover:text-amber-secondary transition-colors">
@@ -287,7 +285,6 @@ export default function ResultsPage({ params }: { params: Promise<{ quadId: stri
 
   return (
     <div className="min-h-screen industrial-base relative py-16">
-      <div className="\!-- scanlines removed --" />
       <div className="container mx-auto px-4 max-w-6xl relative z-10">
         <div className="mb-8">
           <Link
@@ -406,14 +403,14 @@ export default function ResultsPage({ params }: { params: Promise<{ quadId: stri
                 )}
                 <Link
                   href={`/play/${quadId}${groupCode ? `?group=${groupCode}` : ''}`}
-                  className="px-6 py-3 border-2 border-rust-primary text-rust-primary rounded-none font-bold uppercase tracking-wider hover:bg-[#00f0ff] hover:text-black transition-all text-center"
+                  className="px-6 py-3 border-2 border-rust-primary text-rust-primary rounded-none font-bold uppercase tracking-wider hover:bg-rust-primary hover:text-black transition-all text-center"
                 >
                   Retake Quiz
                 </Link>
                 {isSoloMode && (
                   <Link
                     href="/group"
-                    className="px-6 py-3 border-2 border-burnt-orange text-burnt-orange rounded-none font-bold uppercase tracking-wider hover:bg-[#39ff14] hover:text-black transition-all text-center"
+                    className="px-6 py-3 border-2 border-burnt-orange text-burnt-orange rounded-none font-bold uppercase tracking-wider hover:bg-burnt-orange hover:text-black transition-all text-center"
                   >
                     Create Group & Invite Friends
                   </Link>

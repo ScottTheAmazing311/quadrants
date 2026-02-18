@@ -63,7 +63,6 @@ export default function GroupLobbyPage({ params }: { params: Promise<{ code: str
   if (loading) {
     return (
       <div className="min-h-screen industrial-base relative flex items-center justify-center">
-        <div className="\!-- scanlines removed --" />
         <div className="text-xl text-rust-primary  relative z-10">Loading group...</div>
       </div>
     );
@@ -72,7 +71,6 @@ export default function GroupLobbyPage({ params }: { params: Promise<{ code: str
   if (!group) {
     return (
       <div className="min-h-screen industrial-base relative flex items-center justify-center">
-        <div className="\!-- scanlines removed --" />
         <div className="text-center premium-card p-12 rounded-none max-w-lg relative z-10">
           <h1 className="text-4xl font-black text-white uppercase mb-4">Group Not Found</h1>
           <p className="text-[#b8b8d1] mb-6">The code "{code}" doesn't match any group.</p>
@@ -88,7 +86,6 @@ export default function GroupLobbyPage({ params }: { params: Promise<{ code: str
   if (!currentPlayerId) {
     return (
       <div className="min-h-screen industrial-base relative py-16">
-        <div className="\!-- scanlines removed --" />
         <div className="container mx-auto px-4 max-w-2xl relative z-10">
           <div className="mb-8">
             <Link

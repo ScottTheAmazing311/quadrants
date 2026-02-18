@@ -92,7 +92,6 @@ function CreateForm() {
 
   return (
     <div className="min-h-screen industrial-base relative py-16">
-      <div className="\!-- scanlines removed --" />
       <div className="container mx-auto px-4 max-w-4xl relative z-10">
         <div className="mb-8">
           <Link
@@ -185,7 +184,7 @@ function CreateForm() {
                     type="button"
                     onClick={handleGenerateQuestions}
                     disabled={generating}
-                    className="px-4 py-2 border-2 border-rust-primary text-rust-primary rounded-none font-bold uppercase text-xs tracking-wider hover:bg-[#00f0ff] hover:text-black transition-all disabled:opacity-50"
+                    className="px-4 py-2 border-2 border-rust-primary text-rust-primary rounded-none font-bold uppercase text-xs tracking-wider hover:bg-rust-primary hover:text-black transition-all disabled:opacity-50"
                   >
                     {generating ? 'Generating...' : 'Add Random'}
                   </button>
@@ -193,7 +192,7 @@ function CreateForm() {
                     type="button"
                     onClick={handleGenerateFull}
                     disabled={generating}
-                    className="px-4 py-2 border-2 border-burnt-orange text-burnt-orange rounded-none font-bold uppercase text-xs tracking-wider hover:bg-[#39ff14] hover:text-black transition-all disabled:opacity-50"
+                    className="px-4 py-2 border-2 border-burnt-orange text-burnt-orange rounded-none font-bold uppercase text-xs tracking-wider hover:bg-burnt-orange hover:text-black transition-all disabled:opacity-50"
                   >
                     Generate Full
                   </button>
@@ -223,8 +222,7 @@ export default function CreatePage() {
   return (
     <Suspense fallback={
       <div className="min-h-screen industrial-base relative flex items-center justify-center">
-        <div className="\!-- scanlines removed --" />
-        <div className="text-xl text-rust-primary  relative z-10">Loading...</div>
+          <div className="text-xl text-rust-primary  relative z-10">Loading...</div>
       </div>
     }>
       <CreateForm />

@@ -16,17 +16,20 @@ export function Avatar({ imageUrl, name, size = 'md' }: AvatarProps) {
   const initials = getInitials(name);
 
   return (
-    <div 
-      className={`${sizeClasses[size]} rounded-full border-2 border-gray-300 shadow-md overflow-hidden bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center font-bold text-white`}
+    <div
+      className={`${sizeClasses[size]} rounded-full border-3 border-rust-primary overflow-hidden bg-rust-primary flex items-center justify-center font-black text-black uppercase texture-brushed`}
+      style={{
+        boxShadow: 'inset 0 1px 2px rgba(255, 147, 65, 0.2), inset 0 -1px 2px rgba(0, 0, 0, 0.3), 0 2px 4px rgba(0, 0, 0, 0.3)'
+      }}
     >
       {imageUrl ? (
-        <img 
-          src={imageUrl} 
-          alt={name} 
+        <img
+          src={imageUrl}
+          alt={name}
           className="w-full h-full object-cover"
         />
       ) : (
-        <span>{initials}</span>
+        <span style={{ textShadow: '0 1px 1px rgba(0, 0, 0, 0.5)' }}>{initials}</span>
       )}
     </div>
   );

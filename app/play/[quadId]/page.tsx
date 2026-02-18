@@ -189,7 +189,6 @@ export default function PlayPage({ params }: { params: Promise<{ quadId: string 
   if (mode === 'setup') {
     return (
       <div className="min-h-screen industrial-base relative py-16">
-        <div className="\!-- scanlines removed --" />
         <div className="container mx-auto px-4 max-w-2xl relative z-10">
           <div className="premium-card rounded-none p-8">
             <h1 className="text-4xl font-black text-white uppercase mb-2 text-center">
@@ -207,13 +206,13 @@ export default function PlayPage({ params }: { params: Promise<{ quadId: string 
                 <div className="space-y-4">
                   <button
                     onClick={() => setSetupChoice('join')}
-                    className="w-full py-4 border-2 border-rust-primary text-rust-primary rounded-none font-bold uppercase hover:bg-[#00f0ff] hover:text-black transition-all"
+                    className="w-full py-4 border-2 border-rust-primary text-rust-primary rounded-none font-bold uppercase hover:bg-rust-primary hover:text-black transition-all"
                   >
                     Join Existing Group
                   </button>
                   <button
                     onClick={() => setSetupChoice('create')}
-                    className="w-full py-4 border-2 border-amber-secondary text-amber-secondary rounded-none font-bold uppercase hover:bg-[#ff00aa] hover:text-black transition-all"
+                    className="w-full py-4 border-2 border-amber-secondary text-amber-secondary rounded-none font-bold uppercase hover:bg-amber-secondary hover:text-black transition-all"
                   >
                     Create New Group
                   </button>
@@ -307,7 +306,6 @@ export default function PlayPage({ params }: { params: Promise<{ quadId: string 
   if (mode === 'complete') {
     return (
       <div className="min-h-screen industrial-base relative py-16">
-        <div className="\!-- scanlines removed --" />
         <div className="container mx-auto px-4 max-w-2xl relative z-10">
           <div className="premium-card rounded-none p-12 text-center">
             <h1 className="text-5xl font-black text-white uppercase mb-4">Complete!</h1>
@@ -341,7 +339,6 @@ export default function PlayPage({ params }: { params: Promise<{ quadId: string 
 
   return (
     <div className="min-h-screen industrial-base relative py-16">
-      <div className="\!-- scanlines removed --" />
 
       <div className="container mx-auto px-4 max-w-3xl relative z-10">
         <div className="premium-card rounded-none p-8 md:p-12">
