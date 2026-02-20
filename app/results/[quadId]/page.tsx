@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
 import { storage } from '@/lib/storage';
 import { QuadrantGrid } from '@/components/QuadrantGrid';
+import { QuestionReveal } from '@/components/QuestionReveal';
 import { Question, Player, Response, Quad } from '@/types';
 
 export default function ResultsPage({ params }: { params: Promise<{ quadId: string }> }) {
@@ -21,6 +22,7 @@ export default function ResultsPage({ params }: { params: Promise<{ quadId: stri
   const [correlationMessage, setCorrelationMessage] = useState<string | null>(null);
   const [showingCorrelation, setShowingCorrelation] = useState(false);
   const [currentCorrelationPair, setCurrentCorrelationPair] = useState<{ q1Id: string; q2Id: string } | null>(null);
+  const [showQuestionReveal, setShowQuestionReveal] = useState(false);
 
   useEffect(() => {
     const loadData = async () => {
@@ -380,6 +382,16 @@ export default function ResultsPage({ params }: { params: Promise<{ quadId: stri
 
               <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
                 <button
+                  onClick={() => setShowQuestionReveal(true)}
+                  className="px-6 py-3 bg-rust-primary texture-brushed text-black rounded-none font-bold uppercase tracking-wider hover:scale-105 transition-all text-center"
+                  style={{
+                    boxShadow: 'inset 0 1px 2px rgba(255, 147, 65, 0.2), inset 0 -1px 2px rgba(0, 0, 0, 0.3), 0 4px 8px rgba(0, 0, 0, 0.3)',
+                    textShadow: '0 1px 2px rgba(0, 0, 0, 0.5)'
+                  }}
+                >
+                  Question Reveal
+                </button>
+                <button
                   onClick={findInterestingCorrelation}
                   className="px-6 py-3 bg-burnt-orange texture-brushed text-black rounded-none font-bold uppercase tracking-wider hover:scale-105 transition-all text-center"
                   style={{
@@ -420,6 +432,15 @@ export default function ResultsPage({ params }: { params: Promise<{ quadId: stri
           )}
         </div>
       </div>
+
+      {showQuestionReveal && (
+        <QuestionReveal
+          questions={questions}
+          responses={responses}
+          players={players}
+          onClose={() => setShowQuestionReveal(false)}
+        />
+      )}
     </div>
   );
 }
