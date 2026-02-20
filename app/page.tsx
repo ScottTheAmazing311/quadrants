@@ -7,6 +7,71 @@ import { storage } from '@/lib/storage';
 import { QuadCard } from '@/components/QuadCard';
 import { QuadWithQuestions, Player } from '@/types';
 
+const TITLE = 'QUADRANTS';
+
+function TypewriterTitle() {
+  const [displayedCount, setDisplayedCount] = useState(0);
+  const [cursorVisible, setCursorVisible] = useState(true);
+
+  useEffect(() => {
+    // Brief delay so the fade-up wrapper settles first
+    const startDelay = setTimeout(() => {
+      const interval = setInterval(() => {
+        setDisplayedCount(prev => {
+          if (prev >= TITLE.length) {
+            clearInterval(interval);
+            return prev;
+          }
+          return prev + 1;
+        });
+      }, 60);
+      return () => clearInterval(interval);
+    }, 200);
+    return () => clearTimeout(startDelay);
+  }, []);
+
+  // Fade out cursor after all letters revealed
+  useEffect(() => {
+    if (displayedCount === TITLE.length) {
+      const timeout = setTimeout(() => setCursorVisible(false), 600);
+      return () => clearTimeout(timeout);
+    }
+  }, [displayedCount]);
+
+  return (
+    <div className="mb-6 inline-block animate-fade-up delay-0">
+      <div className="relative">
+        <h1
+          className="text-8xl md:text-9xl font-black tracking-tighter mb-2 text-letterpress"
+          style={{ color: '#c87341', fontFamily: 'var(--font-display), system-ui, sans-serif' }}
+          aria-label={TITLE}
+        >
+          {TITLE.split('').map((char, i) => (
+            <span
+              key={i}
+              style={{ opacity: i < displayedCount ? 1 : 0 }}
+            >
+              {char}
+            </span>
+          ))}
+          <span
+            className={cursorVisible ? 'animate-blink-cursor' : ''}
+            style={{
+              opacity: cursorVisible ? undefined : 0,
+              transition: 'opacity 0.3s',
+              fontWeight: 300,
+              marginLeft: '-0.05em',
+            }}
+          >
+            |
+          </span>
+        </h1>
+        <div className="absolute -bottom-2 left-0 right-0 h-1 bg-rust-primary opacity-50 animate-line-reveal delay-2"></div>
+      </div>
+    </div>
+  );
+}
+
 export default function Home() {
   const [quads, setQuads] = useState<QuadWithQuestions[]>([]);
   const [completedQuadIds, setCompletedQuadIds] = useState<Set<string>>(new Set());
@@ -188,19 +253,8 @@ export default function Home() {
       {/* Hero Section */}
       <div className="container mx-auto px-4 py-20 relative z-10">
         <div className="text-center mb-20">
-          {/* Logo/Title */}
-          <div className="mb-6 inline-block animate-fade-up delay-0">
-            <div className="relative">
-              <h1 className="text-8xl md:text-9xl font-black tracking-tighter mb-2 text-letterpress"
-                  style={{
-                    color: '#c87341',
-                    fontFamily: 'var(--font-display), system-ui, sans-serif'
-                  }}>
-                QUADRANTS
-              </h1>
-              <div className="absolute -bottom-2 left-0 right-0 h-1 bg-rust-primary opacity-50 animate-line-reveal delay-2"></div>
-            </div>
-          </div>
+          {/* Logo/Title — Typewriter Punch */}
+          <TypewriterTitle />
 
           {/* Tagline */}
           <p className="text-xl md:text-2xl text-[#b8b8d1] max-w-3xl mx-auto mb-12 leading-relaxed animate-fade-up delay-2">
