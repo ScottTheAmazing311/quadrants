@@ -167,7 +167,7 @@ export default function PlayPage({ params }: { params: Promise<{ quadId: string 
   if (loading) {
     return (
       <div className="min-h-screen industrial-base relative flex items-center justify-center">
-        <div className="text-xl text-rust-primary ">Loading...</div>
+        <div className="text-xl text-rust-primary animate-glow-pulse" style={{ fontFamily: 'var(--font-display), system-ui, sans-serif' }}>Loading...</div>
       </div>
     );
   }
@@ -362,7 +362,7 @@ export default function PlayPage({ params }: { params: Promise<{ quadId: string 
           <div className="mb-8">
             <div className="w-full h-2 bg-bg-warm-2 border border-rust-primary/30">
               <div
-                className="h-full bg-rust-primary texture-brushed transition-all duration-300"
+                className="h-full bg-rust-primary texture-brushed transition-all duration-500 ease-out"
                 style={{ width: `${((currentIndex + 1) / questions.length) * 100}%` }}
               />
             </div>
@@ -375,7 +375,7 @@ export default function PlayPage({ params }: { params: Promise<{ quadId: string 
           )}
 
           {currentQuestion && (
-            <div className="mb-12">
+            <div key={currentIndex} className="mb-12 animate-fade-up">
               <h2 className="text-2xl md:text-3xl font-bold text-white mb-12 text-center leading-relaxed">
                 {currentQuestion.prompt}
               </h2>

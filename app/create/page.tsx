@@ -222,7 +222,7 @@ export default function CreatePage() {
   return (
     <Suspense fallback={
       <div className="min-h-screen industrial-base relative flex items-center justify-center">
-          <div className="text-xl text-rust-primary  relative z-10">Loading...</div>
+          <div className="text-xl text-rust-primary relative z-10 animate-glow-pulse" style={{ fontFamily: 'var(--font-display), system-ui, sans-serif' }}>Loading...</div>
       </div>
     }>
       <CreateForm />

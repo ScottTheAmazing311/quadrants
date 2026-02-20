@@ -74,7 +74,7 @@ export default function AnalysisPage({ params }: { params: Promise<{ quadId: str
   if (loading) {
     return (
       <div className="min-h-screen industrial-base relative flex items-center justify-center">
-        <div className="text-xl text-rust-primary font-bold uppercase tracking-wider">Calculating superlatives...</div>
+        <div className="text-xl text-rust-primary font-bold uppercase tracking-wider animate-glow-pulse" style={{ fontFamily: 'var(--font-display), system-ui, sans-serif' }}>Calculating superlatives...</div>
       </div>
     );
   }
@@ -134,7 +134,7 @@ export default function AnalysisPage({ params }: { params: Promise<{ quadId: str
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Most Alike */}
           {mostAlike && (
-            <div className="premium-card rounded-none p-8 border-embossed texture-concrete">
+            <div className="premium-card rounded-none p-8 border-embossed texture-concrete animate-fade-up delay-1">
               <div className="text-center mb-6">
                 <div className="inline-block p-4 bg-rust-primary/20 border-2 border-rust-primary rounded-none mb-4">
                   <svg className="w-8 h-8 text-rust-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -161,7 +161,7 @@ export default function AnalysisPage({ params }: { params: Promise<{ quadId: str
 
           {/* Most Opposed */}
           {mostOpposed && (
-            <div className="premium-card rounded-none p-8 border-embossed texture-concrete">
+            <div className="premium-card rounded-none p-8 border-embossed texture-concrete animate-fade-up delay-2">
               <div className="text-center mb-6">
                 <div className="inline-block p-4 bg-amber-secondary/20 border-2 border-amber-secondary rounded-none mb-4">
                   <svg className="w-8 h-8 text-amber-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -188,7 +188,7 @@ export default function AnalysisPage({ params }: { params: Promise<{ quadId: str
 
           {/* Most Extreme */}
           {mostExtreme && (
-            <div className="premium-card rounded-none p-8 border-embossed texture-concrete">
+            <div className="premium-card rounded-none p-8 border-embossed texture-concrete animate-fade-up delay-3">
               <div className="text-center mb-6">
                 <div className="inline-block p-4 bg-burnt-orange/20 border-2 border-burnt-orange rounded-none mb-4">
                   <svg className="w-8 h-8 text-burnt-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -213,7 +213,7 @@ export default function AnalysisPage({ params }: { params: Promise<{ quadId: str
 
           {/* Most Neutral */}
           {mostNeutral && (
-            <div className="premium-card rounded-none p-8 border-embossed texture-concrete">
+            <div className="premium-card rounded-none p-8 border-embossed texture-concrete animate-fade-up delay-4">
               <div className="text-center mb-6">
                 <div className="inline-block p-4 bg-steel-gray/20 border-2 border-steel-gray rounded-none mb-4">
                   <svg className="w-8 h-8 text-steel-gray" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -238,7 +238,7 @@ export default function AnalysisPage({ params }: { params: Promise<{ quadId: str
 
           {/* Wildcard */}
           {wildcard && (
-            <div className="premium-card rounded-none p-8 border-embossed texture-concrete md:col-span-2">
+            <div className="premium-card rounded-none p-8 border-embossed texture-concrete md:col-span-2 animate-fade-up delay-5">
               <div className="text-center mb-6">
                 <div className="inline-block p-4 bg-rust-primary/20 border-2 border-rust-primary rounded-none mb-4">
                   <svg className="w-8 h-8 text-rust-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">

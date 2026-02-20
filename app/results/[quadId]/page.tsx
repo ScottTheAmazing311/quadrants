@@ -145,7 +145,7 @@ export default function ResultsPage({ params }: { params: Promise<{ quadId: stri
     }
 
     // Find all correlations above a threshold
-    const allCorrelations: { q1: Question; q2: Question; coefficient: number }[] = [];
+    const allCorrelations: { q1: Question; q2: Question; coefficient: number; lowLow: number; lowHigh: number; highLow: number; highHigh: number }[] = [];
 
     // Check all pairs of questions
     for (let i = 0; i < questions.length; i++) {
@@ -265,7 +265,7 @@ export default function ResultsPage({ params }: { params: Promise<{ quadId: stri
   if (loading) {
     return (
       <div className="min-h-screen industrial-base relative flex items-center justify-center">
-        <div className="text-xl text-rust-primary  relative z-10">Loading results...</div>
+        <div className="text-xl text-rust-primary relative z-10 animate-glow-pulse" style={{ fontFamily: 'var(--font-display), system-ui, sans-serif' }}>Loading results...</div>
       </div>
     );
   }
@@ -298,11 +298,11 @@ export default function ResultsPage({ params }: { params: Promise<{ quadId: stri
           </Link>
         </div>
 
-        <div className="premium-card rounded-none p-8 md:p-12">
+        <div className="premium-card rounded-none p-8 md:p-12 animate-fade-up">
           <h1 className="text-4xl md:text-5xl font-black text-white uppercase mb-2 tracking-wider">
             {quad.name}
           </h1>
-          <div className="h-1 w-32 bg-rust-primary texture-brushed mb-4"></div>
+          <div className="h-1 w-32 bg-rust-primary texture-brushed mb-4 animate-line-reveal delay-2"></div>
           <p className="text-[#b8b8d1] mb-8">
             {isSoloMode ? 'Solo Mode' : `${players.length} ${players.length === 1 ? 'player' : 'players'} responded`}
           </p>

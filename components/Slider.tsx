@@ -39,10 +39,10 @@ export function Slider({ value, onChange, leftLabel, rightLabel }: SliderProps) 
       {/* Labels */}
       <div className="flex justify-between px-4">
         <div className="text-left flex-1">
-          <div className="text-base font-bold text-rust-primary uppercase tracking-wide">{leftLabel}</div>
+          <div className="text-base font-bold text-rust-primary uppercase tracking-wide" style={{ fontFamily: 'var(--font-display), system-ui, sans-serif' }}>{leftLabel}</div>
         </div>
         <div className="text-right flex-1">
-          <div className="text-base font-bold text-amber-secondary uppercase tracking-wide">{rightLabel}</div>
+          <div className="text-base font-bold text-amber-secondary uppercase tracking-wide" style={{ fontFamily: 'var(--font-display), system-ui, sans-serif' }}>{rightLabel}</div>
         </div>
       </div>
 

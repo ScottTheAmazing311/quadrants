@@ -63,7 +63,7 @@ export default function GroupLobbyPage({ params }: { params: Promise<{ code: str
   if (loading) {
     return (
       <div className="min-h-screen industrial-base relative flex items-center justify-center">
-        <div className="text-xl text-rust-primary  relative z-10">Loading group...</div>
+        <div className="text-xl text-rust-primary relative z-10 animate-glow-pulse" style={{ fontFamily: 'var(--font-display), system-ui, sans-serif' }}>Loading group...</div>
       </div>
     );
   }

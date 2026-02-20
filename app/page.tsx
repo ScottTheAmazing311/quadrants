@@ -177,7 +177,7 @@ export default function Home() {
   if (loading) {
     return (
       <div className="min-h-screen industrial-base relative flex items-center justify-center">
-        <div className="text-xl text-rust-primary relative z-10 font-bold uppercase tracking-wider">Loading...</div>
+        <div className="text-xl text-rust-primary relative z-10 font-bold uppercase tracking-wider animate-glow-pulse" style={{ fontFamily: 'var(--font-display), system-ui, sans-serif' }}>Loading...</div>
       </div>
     );
   }
@@ -189,20 +189,21 @@ export default function Home() {
       <div className="container mx-auto px-4 py-20 relative z-10">
         <div className="text-center mb-20">
           {/* Logo/Title */}
-          <div className="mb-6 inline-block">
+          <div className="mb-6 inline-block animate-fade-up delay-0">
             <div className="relative">
               <h1 className="text-8xl md:text-9xl font-black tracking-tighter mb-2 text-letterpress"
                   style={{
-                    color: '#c87341'
+                    color: '#c87341',
+                    fontFamily: 'var(--font-display), system-ui, sans-serif'
                   }}>
                 QUADRANTS
               </h1>
-              <div className="absolute -bottom-2 left-0 right-0 h-1 bg-rust-primary opacity-50"></div>
+              <div className="absolute -bottom-2 left-0 right-0 h-1 bg-rust-primary opacity-50 animate-line-reveal delay-2"></div>
             </div>
           </div>
 
           {/* Tagline */}
-          <p className="text-xl md:text-2xl text-[#b8b8d1] max-w-3xl mx-auto mb-12 leading-relaxed">
+          <p className="text-xl md:text-2xl text-[#b8b8d1] max-w-3xl mx-auto mb-12 leading-relaxed animate-fade-up delay-2">
             Discover alignment through visual data.
             <br />
             <span className="text-rust-primary font-bold">Map perspectives.</span>{' '}
@@ -211,7 +212,7 @@ export default function Home() {
           </p>
 
           {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8 animate-fade-up delay-4">
             <Link
               href="/create"
               className="group relative px-10 py-5 bg-burnt-orange texture-brushed rounded-none font-bold text-lg text-black uppercase tracking-wider overflow-hidden transition-all hover:scale-105"
@@ -238,7 +239,7 @@ export default function Home() {
           </div>
 
           {/* Stats Bar */}
-          <div className="inline-flex gap-8 px-8 py-4 bg-bg-warm-2 border-embossed rounded-none texture-concrete">
+          <div className="inline-flex gap-8 px-8 py-4 bg-bg-warm-2 border-embossed rounded-none texture-concrete animate-scale-in delay-5">
             <div className="text-center">
               <div className="text-3xl font-bold text-rust-primary">{quads.length}</div>
               <div className="text-xs text-[#7a7a9e] uppercase tracking-wider">Quads</div>
@@ -306,21 +307,22 @@ export default function Home() {
         {quads.length > 0 && (
           <div className="mt-20">
             <div className="flex items-center gap-4 mb-10">
-              <div className="h-px bg-rust-primary/50 flex-1"></div>
-              <h2 className="text-4xl font-black text-white uppercase tracking-wider">
+              <div className="h-px bg-rust-primary/50 flex-1 animate-line-reveal"></div>
+              <h2 className="text-4xl font-black text-white uppercase tracking-wider animate-fade-up">
                 <span className="text-rust-primary">Popular</span> Quads
               </h2>
-              <div className="h-px bg-rust-primary/50 flex-1"></div>
+              <div className="h-px bg-rust-primary/50 flex-1 animate-line-reveal" style={{ transformOrigin: 'right' }}></div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {quads.map(quad => (
-                <QuadCard
-                  key={quad.id}
-                  quad={quad}
-                  completed={completedQuadIds.has(quad.id)}
-                  completedPlayers={quadCompletions.get(quad.id) || []}
-                />
+              {quads.map((quad, i) => (
+                <div key={quad.id} className="animate-fade-up" style={{ animationDelay: `${i * 75}ms` }}>
+                  <QuadCard
+                    quad={quad}
+                    completed={completedQuadIds.has(quad.id)}
+                    completedPlayers={quadCompletions.get(quad.id) || []}
+                  />
+                </div>
               ))}
             </div>
           </div>

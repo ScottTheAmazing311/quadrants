@@ -19,7 +19,7 @@ export function QuadCard({ quad, groupCode, completed = false, completedPlayers 
     : `/results/${quad.id}`;
 
   return (
-    <div className="premium-card rounded-none p-6 relative overflow-hidden h-full flex flex-col">
+    <div className="premium-card rounded-none p-6 relative overflow-hidden h-full flex flex-col hover-lift">
       {/* Completed Badge */}
       {completed && (
         <div className="absolute top-4 right-4 z-10">
@@ -94,8 +94,9 @@ export function QuadCard({ quad, groupCode, completed = false, completedPlayers 
         <div className="flex gap-2">
           <Link
             href={resultsUrl}
-            className="flex-1 py-3 bg-burnt-orange texture-brushed text-black rounded-none font-bold uppercase text-xs tracking-wider hover:scale-105 transition-all text-center"
+            className="flex-1 py-3 bg-burnt-orange texture-brushed text-black rounded-none font-bold uppercase text-xs tracking-wider hover-press transition-all text-center"
             style={{
+              fontFamily: 'var(--font-display), system-ui, sans-serif',
               boxShadow: 'inset 0 1px 2px rgba(255, 147, 65, 0.2), inset 0 -1px 2px rgba(0, 0, 0, 0.3), 0 4px 8px rgba(0, 0, 0, 0.3)',
               textShadow: '0 1px 2px rgba(0, 0, 0, 0.5)'
             }}
@@ -104,7 +105,8 @@ export function QuadCard({ quad, groupCode, completed = false, completedPlayers 
           </Link>
           <Link
             href={playUrl}
-            className="flex-1 py-3 border-3 border-rust-primary text-rust-primary rounded-none font-bold uppercase text-xs tracking-wider hover:bg-rust-primary hover:text-black transition-all text-center"
+            className="flex-1 py-3 border-3 border-rust-primary text-rust-primary rounded-none font-bold uppercase text-xs tracking-wider hover:bg-rust-primary hover:text-black hover-press transition-all text-center"
+            style={{ fontFamily: 'var(--font-display), system-ui, sans-serif' }}
           >
             Retake
           </Link>
@@ -112,8 +114,9 @@ export function QuadCard({ quad, groupCode, completed = false, completedPlayers 
       ) : (
         <Link
           href={playUrl}
-          className="block w-full py-3 bg-rust-primary texture-brushed text-black rounded-none font-bold uppercase text-xs tracking-wider hover:scale-105 transition-all text-center"
+          className="block w-full py-3 bg-rust-primary texture-brushed text-black rounded-none font-bold uppercase text-xs tracking-wider hover-press transition-all text-center"
           style={{
+            fontFamily: 'var(--font-display), system-ui, sans-serif',
             boxShadow: 'inset 0 1px 2px rgba(255, 147, 65, 0.2), inset 0 -1px 2px rgba(0, 0, 0, 0.3), 0 4px 8px rgba(0, 0, 0, 0.3)',
             textShadow: '0 1px 2px rgba(0, 0, 0, 0.5)'
           }}
